@@ -29,7 +29,14 @@ class User extends Authenticatable
      * @var string[]
      */
     protected $fillable = [
-        'name', 'email', 'password', 'phone_number', 'address', 'house_number', 'city', 'roles'
+        'name',
+        'email',
+        'password',
+        'phone_number',
+        'address',
+        'house_number',
+        'city',
+        'roles'
     ];
 
     // relational
@@ -44,6 +51,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
+        "deleted_at",
         'password',
         'remember_token',
         'two_factor_recovery_codes',
