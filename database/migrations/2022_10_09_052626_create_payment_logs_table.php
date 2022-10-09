@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string("order_id");
             $table->foreignId("trx_id")->constrained("transactions")->onDelete("cascade");
             $table->integer("gross_amount");
-            $table->integer("quantity");
 
             $table->json("raw");
             $table->softDeletes();
