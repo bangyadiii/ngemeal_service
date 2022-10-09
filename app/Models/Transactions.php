@@ -12,7 +12,13 @@ class Transactions extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'food_id', 'user_id', 'quantity', 'total', 'status', 'payment_url', "metadata"
+        'food_id',
+        'user_id',
+        'quantity',
+        'total',
+        'status',
+        'payment_url',
+        "metadata"
     ];
 
     public function food()
