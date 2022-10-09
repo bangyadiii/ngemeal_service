@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthenticateUserController;
 use App\Http\Controllers\Auth\RegisterUserController;
 use App\Http\Controllers\FoodController;
+use App\Http\Controllers\TransactionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -27,6 +28,7 @@ Route::group($routeAttributes, function () {
     Route::post("/register", [RegisterUserController::class, "store"])->name("login");
 
     Route::get("/foods", [FoodController::class, "all"])->name("get.food");
+    Route::get("/transactions", [TransactionController::class, "all"])->name("get.transaction");
 
     // auth sanctum
     Route::group(["middleware" => "auth:sanctum"], function () {
