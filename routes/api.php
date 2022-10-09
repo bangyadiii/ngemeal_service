@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthenticateUserController;
+use App\Http\Controllers\Auth\RegisterUserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +16,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+$routeAttributes = [
+    "prefix" => "/v1",
+    "as" => "api."
+];
+
+Route::group($routeAttributes, function () {
+    Route::post("/login", [AuthenticateUserController::class, "login"])->name("login");
+    Route::post("/register", [RegisterUserController::class, "store"])->name("login");
+
+
+    // auth sanctum
+    Route::group(["middleware" => "auth:sanctum"], function () {
+        Route::as("auth.")->prefix("auth")->group(function () {
+            Route::put("/user/update", [RegisterUserController::class, "update"])->name("update");
+            Route::get("/user", [RegisterUserController::class, "update"])->name("show");
+        });
+    });
 });
