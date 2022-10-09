@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\ResponseFormatter;
+use App\Http\Requests\UpdateTransactionRequest;
 use App\Models\Transactions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -36,8 +37,14 @@ class TransactionController extends Controller
             $trx->where("name",  $status);
         }
 
-
-
         return ResponseFormatter::success("Transaction list berhasil diambil", 200, $trx->paginate($limit));
+    }
+
+    public function update(UpdateTransactionRequest $request, $id)
+    {
+        $trx = Transactions::findOrFail($id);
+        $trx->fill($request->validated())->save();
+
+        return ResponseFormatter::success("Trx has been updated", 200, $trx);
     }
 }

@@ -29,6 +29,7 @@ Route::group($routeAttributes, function () {
 
     Route::get("/foods", [FoodController::class, "all"])->name("get.food");
     Route::get("/transactions", [TransactionController::class, "all"])->name("get.transaction");
+    Route::put("/transactions/{id}", [TransactionController::class, "update"])->name("update.transaction");
 
     // auth sanctum
     Route::group(["middleware" => "auth:sanctum"], function () {
