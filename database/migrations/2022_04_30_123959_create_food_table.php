@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string("name")->nullable();
             $table->string("description")->nullable();
             $table->string("ingredients")->nullable();
-            $table->integer("price")->nullable();
+            $table->unsignedBigInteger("price")->nullable();
             $table->double("rate")->nullable();
             $table->string("types")->nullable();
             $table->string("picture_path")->nullable();

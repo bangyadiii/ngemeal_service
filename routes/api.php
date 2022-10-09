@@ -28,8 +28,7 @@ Route::group($routeAttributes, function () {
     Route::post("/register", [RegisterUserController::class, "store"])->name("login");
 
     Route::get("/foods", [FoodController::class, "all"])->name("get.food");
-    Route::get("/transactions", [TransactionController::class, "all"])->name("get.transaction");
-    Route::put("/transactions/{id}", [TransactionController::class, "update"])->name("update.transaction");
+    Route::post("/checkout", [TransactionController::class, "checkout"])->name("checkout");
 
     // auth sanctum
     Route::group(["middleware" => "auth:sanctum"], function () {
@@ -37,5 +36,8 @@ Route::group($routeAttributes, function () {
             Route::put("/user/update", [RegisterUserController::class, "update"])->name("update");
             Route::get("/user", [RegisterUserController::class, "update"])->name("show");
         });
+
+        Route::get("/transactions", [TransactionController::class, "all"])->name("get.transaction");
+        Route::put("/transactions/{id}", [TransactionController::class, "update"])->name("update.transaction");
     });
 });
