@@ -7,16 +7,26 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ApiLoginRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Request;
 
 class AuthenticateUserController extends Controller
 {
     public function login(ApiLoginRequest $request)
     {
-        $user = User::where("email", $request->email)->firstOrFail();
+        $user = User::where("email", $request->email)->first();
 
-        if (!Auth::attempt($request->only(["email", "password"]))) {
-            return ResponseFormatter::error("Unautorized", 401, "Authorization failed");
+        if (!$user) {
+            return ResponseFormatter::error(
+                "Email doesn't exist in our records.",
+                400,
+            );
+        }
+        if (!Hash::check($request->password, $user->password)) {
+            return ResponseFormatter::error(
+                "The credentials are incorrect.",
+                400,
+            );
         }
 
         $accessToken = $user->createToken($request->device_name)->plainTextToken;
