@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthenticateUserController;
 use App\Http\Controllers\Auth\RegisterUserController;
+use App\Http\Controllers\Auth\UserInformationController;
 use App\Http\Controllers\FoodController;
 use App\Http\Controllers\TransactionController;
 use Illuminate\Http\Request;
@@ -33,8 +34,8 @@ Route::group($routeAttributes, function () {
     // auth sanctum
     Route::group(["middleware" => "auth:sanctum"], function () {
         Route::as("auth.")->prefix("auth")->group(function () {
-            Route::put("/user/update", [RegisterUserController::class, "update"])->name("update");
-            Route::get("/user", [RegisterUserController::class, "update"])->name("show");
+            Route::put("/user/update", [UserInformationController::class, "update"])->name("update");
+            Route::get("/me", [UserInformationController::class, "show"])->name("show");
         });
 
         Route::get("/transactions", [TransactionController::class, "all"])->name("get.transaction");
