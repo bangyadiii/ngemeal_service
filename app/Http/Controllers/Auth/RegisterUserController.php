@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Events\NewUserRegistered;
 use App\Helpers\ResponseFormatter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterUserRequest;
@@ -18,10 +19,8 @@ class RegisterUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        return ResponseFormatter::success(
-            "OK",
-            200,
-            $user
-        );
+        NewUserRegistered::dispatch($user);
+
+        return ResponseFormatter::success("OK", 200, $user);
     }
 }
