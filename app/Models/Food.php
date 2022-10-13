@@ -6,7 +6,6 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Hash;
 
 class Food extends Model
 {
@@ -14,19 +13,17 @@ class Food extends Model
     use SoftDeletes;
 
     protected $fillable =  [
-        'name', 'description', 'ingredients', 'price', 'rate', 'types', "picturePath"
+        'name', 'description', 'ingredients', 'price', 'rate', 'types'
     ];
+
+    public function images()
+    {
+        return $this->hasMany(FoodImages::class, "food_id", "id");
+    }
 
     public function transactions()
     {
         $this->hasMany(Transactions::class);
-    }
-
-    public function toArray()
-    {
-        $toArray = parent::toArray();
-        $toArray["picturePath"] = $this->picturePath;
-        return $toArray;
     }
 
     public function getCreatedAtAttribute($value)

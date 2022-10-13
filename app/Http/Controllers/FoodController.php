@@ -3,12 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\ResponseFormatter;
+use App\Http\Requests\FoodStoreRequest;
+use App\Http\Requests\FoodUpdateRequest;
 use App\Models\Food;
 use Illuminate\Http\Request;
+use App\Traits\MediaUploadTrait;
 
 class FoodController extends Controller
 {
-    public function all(Request $request)
+    use MediaUploadTrait;
+
+    public static $modelName = "Food";
+    public function index(Request $request)
     {
         $id = $request->input("food_id");
         $name = $request->input("name");
@@ -55,5 +61,39 @@ class FoodController extends Controller
 
 
         return ResponseFormatter::success("Product list berhasil diambil", 200, $food->paginate($limit));
+    }
+    public function store(FoodStoreRequest $request)
+    {
+        $validatedData = $request->except("images");
+        $food = Food::create($validatedData);
+        $imagesArr = array();
+        $files = $request->file('images', []);
+
+        $this->checkAndCreateDirIfNotExist(self::$modelName);
+        foreach ($files as $key => $file) {
+            $isPrimary = $key == 0 ? true : false;
+            $imagePath = $this->storeMedia($file, self::$modelName, $isPrimary, $food);
+
+            if (!$imagePath) {
+                return ResponseFormatter::error("Occur while uploading photo", 500, $imagesArr);
+            }
+            $imagesArr[] = $imagePath;
+        }
+        $food->images()->insert($imagesArr);
+
+        return ResponseFormatter::success("CREATED", 201);
+    }
+
+    public function update(FoodUpdateRequest $request, Food $food)
+    {
+        $data = $request->validated();
+        $food->fill($data)->save();
+        return ResponseFormatter::success("Food has been updated successfully", 200, $food);
+    }
+
+    public function destroy(Food $food)
+    {
+        $food->delete();
+        return ResponseFormatter::success("Food has been deleted", 200);
     }
 }
