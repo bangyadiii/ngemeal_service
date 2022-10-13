@@ -29,7 +29,7 @@ class FoodController extends Controller
 
 
         if ($id) {
-            $food = Food::find($id);
+            $food = Food::with("images")->find($id);
 
             if ($food) {
                 return ResponseFormatter::error("Food not found", 404);
@@ -60,7 +60,7 @@ class FoodController extends Controller
         }
 
 
-        return ResponseFormatter::success("Product list berhasil diambil", 200, $food->paginate($limit));
+        return ResponseFormatter::success("Product list berhasil diambil", 200, $food->with("images")->paginate($limit));
     }
     public function store(FoodStoreRequest $request)
     {
@@ -81,13 +81,15 @@ class FoodController extends Controller
         }
         $food->images()->insert($imagesArr);
 
-        return ResponseFormatter::success("CREATED", 201);
+        $food =  Food::with("images")->find($food->id);
+        return ResponseFormatter::success("CREATED", 201, $food);
     }
 
     public function update(FoodUpdateRequest $request, Food $food)
     {
         $data = $request->validated();
         $food->fill($data)->save();
+        $food = Food::with("images")->find($food->id);
         return ResponseFormatter::success("Food has been updated successfully", 200, $food);
     }
 
