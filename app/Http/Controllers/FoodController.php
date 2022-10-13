@@ -13,7 +13,7 @@ class FoodController extends Controller
 {
     use MediaUploadTrait;
 
-    public static $modelName = "Food";
+    public static $modelName = "food";
     public function index(Request $request)
     {
         $id = $request->input("food_id");
@@ -60,7 +60,11 @@ class FoodController extends Controller
         }
 
 
-        return ResponseFormatter::success("Product list berhasil diambil", 200, $food->with("images")->paginate($limit));
+        return ResponseFormatter::success(
+            "Product list berhasil diambil",
+            200,
+            $food->with("images")->paginate($limit)
+        );
     }
     public function store(FoodStoreRequest $request)
     {
