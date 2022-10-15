@@ -14,7 +14,7 @@ class CreateNewUserStoreRequest extends FormRequest
      */
     public function authorize()
     {
-        request()->user() && request()->user()->store();
+        return request()->user() && request()->user()->store() === null;
     }
 
     /**

@@ -14,9 +14,31 @@ class StoreController extends Controller
     use MediaUploadTrait;
     public static $modelName = "store";
 
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $id = $request->store_id;
+        $store_name = $request->store_name;
+        $limit = \intval($request->limit) || 20;
+
+        if ($id) {
+            $store = Store::with('users', 'food')->find($id);
+
+            if (!$store) {
+                return ResponseFormatter::error("NOT FOUND", 404, "Store not found.");
+            }
+            return ResponseFormatter::success("Getting store data successfully.", 200, $store);
+        }
+        $store = Store::query();
+        if ($store_name) {
+            $store->where('store_name', "LIKE", "%" . $store_name . "%");
+        }
+        $store = $store->with("user", "food")->paginate();
+
+        return ResponseFormatter::success(
+            "Getting store data list successfully.",
+            200,
+            $store
+        );
     }
 
     public function store(CreateNewUserStoreRequest $request)

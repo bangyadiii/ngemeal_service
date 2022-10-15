@@ -53,7 +53,7 @@ class Handler extends ExceptionHandler
         $this->renderable(function (ValidationException $e, Request $request) {
             //
             if ($request->wantsJson()) {
-                return ResponseFormatter::error("UNPROCESSABEL ENTITIES", 422, $e->getMessage());
+                return ResponseFormatter::error("UNPROCESSABLE ENTITIES", 422, $e->errors());
             }
         });
 
