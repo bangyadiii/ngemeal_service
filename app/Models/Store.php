@@ -17,7 +17,7 @@ class Store extends Model
         'address',
         "description",
         "rekening_number",
-        "logo"
+        "logo_path"
     ];
 
     // relational

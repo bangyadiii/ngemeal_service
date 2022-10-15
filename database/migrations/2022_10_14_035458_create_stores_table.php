@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('address');
             $table->string('description')->nullable();
             $table->integer('rekening_number')->nullable();
-            $table->string('logo')->nullable();
+            $table->string('logo_path')->nullable();
             $table->timestamps();
         });
     }
