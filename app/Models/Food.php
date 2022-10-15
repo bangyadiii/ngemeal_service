@@ -13,9 +13,10 @@ class Food extends Model
     use SoftDeletes;
 
     protected $fillable =  [
-        'name', 'description', 'ingredients', 'price', 'rate', 'types'
+        'store_id', 'name', 'description', 'ingredients', 'price', 'rate', 'types'
     ];
 
+    //relations
     public function images()
     {
         return $this->hasMany(FoodImages::class, "food_id", "id");
@@ -26,6 +27,12 @@ class Food extends Model
         $this->hasMany(Transactions::class);
     }
 
+    public function store()
+    {
+        $this->belongsTo(Store::class);
+    }
+
+    // attributes
     public function getCreatedAtAttribute($value)
     {
         return Carbon::parse($value)->timestamp;
