@@ -6,6 +6,7 @@ use App\Events\NewUserRegistered;
 use App\Helpers\ResponseFormatter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterUserRequest;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
@@ -13,11 +14,10 @@ class RegisterUserController extends Controller
 {
     public function store(RegisterUserRequest $request)
     {
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        $validated = $request->validated();
+        $validated["password"] = Hash::make($validated["password"]);
+        $user = User::create($validated);
+        $user->roles()->attach(Role::where("slug", "user")->orWhere("slug", "customer")->get());
 
         NewUserRegistered::dispatch($user);
 
