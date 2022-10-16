@@ -23,10 +23,10 @@ class Store extends Model
     // relational
     public function user()
     {
-        $this->belongsTo(User::class);
+        return $this->belongsTo(User::class);
     }
     public function food()
     {
-        $this->hasMany(Food::class);
+        return $this->hasMany(Food::class);
     }
 }
