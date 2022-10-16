@@ -6,7 +6,7 @@ use App\Helpers\ResponseFormatter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ApiLoginRequest;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Request;
 
@@ -14,7 +14,7 @@ class AuthenticateUserController extends Controller
 {
     public function login(ApiLoginRequest $request)
     {
-        $user = User::where("email", $request->email)->first();
+        $user = User::with("roles:slug")->where("email", $request->email)->first();
 
         if (!$user) {
             return ResponseFormatter::error(
@@ -29,7 +29,12 @@ class AuthenticateUserController extends Controller
             );
         }
 
-        $accessToken = $user->createToken($request->device_name)->plainTextToken;
+        // delete previous token 
+        $user->tokens()->where("name", $request->device_name)->delete();
+
+        $roles = $user->roles->pluck("slug")->all();
+
+        $accessToken = $user->createToken($request->device_name, $roles)->plainTextToken;
 
         return ResponseFormatter::success("Authorization success.", 200, [
             "access_token" => $accessToken,

@@ -52,7 +52,7 @@ class Handler extends ExceptionHandler
         });
         $this->renderable(function (ValidationException $e, Request $request) {
             //
-            if ($request->wantsJson()) {
+            if ($request->is("api/*")) {
                 return ResponseFormatter::error("UNPROCESSABEL ENTITIES", 422, $e->getMessage());
             }
         });
@@ -60,8 +60,20 @@ class Handler extends ExceptionHandler
 
         $this->renderable(function (NotFoundHttpException $e, Request $request) {
             //
-            if ($request->wantsJson()) {
+            if ($request->is("api/*")) {
                 return ResponseFormatter::error("NOT FOUND", 404, $e->getMessage());
+            }
+        });
+        $this->renderable(function (Throwable $e, Request $request) {
+            //
+            if ($request->is("api/*")) {
+                if (\method_exists($e, "getStatusCode")) {
+                    return ResponseFormatter::errorStatus($e->getStatusCode(), $e);
+                } else {
+                    if (!app()->environment("local")) {
+                        return ResponseFormatter::errorStatus(500, $e);
+                    }
+                }
             }
         });
     }

@@ -24,7 +24,6 @@ return new class extends Migration
             $table->string("house_number")->nullable();
             $table->string("phone_number")->nullable();
             $table->string("city")->nullable();
-            $table->string("roles")->default("USER");
             $table->foreignId('current_team_id')->nullable();
             $table->string('profile_photo_path', 2048)->nullable();
             $table->softDeletes();

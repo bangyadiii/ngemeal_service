@@ -36,13 +36,16 @@ class User extends Authenticatable implements MustVerifyEmail
         'address',
         'house_number',
         'city',
-        'roles'
     ];
 
     // relational
     public function transactions()
     {
         $this->hasMany(Transactions::class);
+    }
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'user_roles');
     }
 
     /**
