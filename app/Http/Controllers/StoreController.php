@@ -32,7 +32,7 @@ class StoreController extends Controller
         if ($store_name) {
             $store->where('store_name', "LIKE", "%" . $store_name . "%");
         }
-        $store = $store->with("user", "food")->paginate();
+        $store = $store->with("user", "food")->paginate($limit);
 
         return ResponseFormatter::success(
             "Getting store data list successfully.",
