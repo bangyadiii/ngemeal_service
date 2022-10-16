@@ -29,7 +29,7 @@ class FoodController extends Controller
 
 
         if ($id) {
-            $food = Food::with("images")->find($id);
+            $food = Food::with("images", "store")->find($id);
 
             if ($food) {
                 return ResponseFormatter::error("Food not found", 404);
@@ -44,7 +44,7 @@ class FoodController extends Controller
             $food->where("name", "like", "%" . $name . "%");
         }
         if ($types) {
-            $food->where("name", "like", "%" . $types . "%");
+            $food->where("types", "like", "%" . $types . "%");
         }
         if ($price_from) {
             $food->where("price", ">=", $price_from);
@@ -63,7 +63,7 @@ class FoodController extends Controller
         return ResponseFormatter::success(
             "Product list berhasil diambil",
             200,
-            $food->with("images")->paginate($limit)
+            $food->with("images", 'store')->paginate($limit)
         );
     }
     public function store(FoodStoreRequest $request)
@@ -76,16 +76,17 @@ class FoodController extends Controller
         $this->checkAndCreateDirIfNotExist(self::$modelName);
         foreach ($files as $key => $file) {
             $isPrimary = $key == 0 ? true : false;
-            $imagePath = $this->storeMedia($file, self::$modelName, $isPrimary, $food);
-
+            $imagePath = $this->storeMedia($file, self::$modelName, $isPrimary);
             if (!$imagePath) {
                 return ResponseFormatter::error("Occur while uploading photo", 500, $imagesArr);
             }
+            $imagePath['image_path'] = $imagePath;
+            $imagePath['is_primary'] = $isPrimary;
             $imagesArr[] = $imagePath;
         }
         $food->images()->insert($imagesArr);
 
-        $food =  Food::with("images")->find($food->id);
+        $food =  Food::with("images", 'store')->find($food->id);
         return ResponseFormatter::success("CREATED", 201, $food);
     }
 
@@ -93,7 +94,7 @@ class FoodController extends Controller
     {
         $data = $request->validated();
         $food->fill($data)->save();
-        $food = Food::with("images")->find($food->id);
+        $food = Food::with("images", 'store')->find($food->id);
         return ResponseFormatter::success("Food has been updated successfully", 200, $food);
     }
 

@@ -9,15 +9,12 @@ use Illuminate\Support\Facades\Storage;
 trait MediaUploadTrait
 {
     //
-    public function storeMedia($file, $modelName, $isPrimary = false, Food $food)
+    public function storeMedia($file, $modelName)
     {
         $name = \uniqid() . '-' . $file->getClientOriginalName();
         $filePath = Storage::putFileAs("tmp/$modelName", $file, $name);
-        return [
-            "food_id" => $food->id,
-            "is_primary" => $isPrimary,
-            "image_path" => $filePath
-        ];
+
+        return $filePath;
     }
 
     public function checkAndCreateDirIfNotExist($modelName)

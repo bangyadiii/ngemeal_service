@@ -43,9 +43,13 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         $this->hasMany(Transactions::class);
     }
+    public function store()
+    {
+        $this->hasOne(Store::class);
+    }
     public function roles()
     {
-        return $this->belongsToMany(Role::class, 'user_roles');
+        $this->hasOne(Store::class);
     }
 
     /**

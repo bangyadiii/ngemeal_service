@@ -14,7 +14,8 @@ class ResponseFormatter
             "status" => "success",
             "message" => "OK"
         ],
-        "data" => null
+        "data" => null,
+        "errors" => null,
     ];
 
 
@@ -26,12 +27,12 @@ class ResponseFormatter
 
         return response()->json(self::$response, $code);
     }
-    public static function error($message = "Internal server error.", $code = 500, $data = null)
+    public static function error($message = "Service Unavailable", $code = 500, $error = null)
     {
         self::$response['meta']["code"] = $code;
         self::$response['meta']["message"] = $message;
         self::$response['meta']["status"] = "error";
-        self::$response["data"] = $data;
+        self::$response["errors"] = $error;
 
         return response()->json(self::$response, $code);
     }
