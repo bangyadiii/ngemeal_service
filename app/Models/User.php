@@ -36,7 +36,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'address',
         'house_number',
         'city',
-        'roles'
     ];
 
     // relational
