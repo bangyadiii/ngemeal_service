@@ -14,7 +14,7 @@ class CreateNewUserStoreRequest extends FormRequest
      */
     public function authorize()
     {
-        return request()->user() && request()->user()->store() === null;
+        return true;
     }
 
     /**
@@ -27,9 +27,9 @@ class CreateNewUserStoreRequest extends FormRequest
         return [
             "store_name" => ['required', 'string'],
             "address" => ['required', 'string'],
-            "description" => ['optional', 'string'],
-            "rekening_number" => ['optional', 'numeric'],
-            "logo" => ['optional', 'file', "mimes:svg,png,jpg,jpeg"],
+            "description" => ['string'],
+            "rekening_number" => ['numeric'],
+            "logo" => ['file', "mimes:svg,png,jpg,jpeg"],
         ];
     }
 }

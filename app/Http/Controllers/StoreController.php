@@ -7,7 +7,10 @@ use App\Models\Store;
 use Illuminate\Http\Request;
 use App\Helpers\ResponseFormatter;
 use App\Http\Requests\UpdateStoreRequest;
+use App\Models\User;
+use App\Notifications\StoreCreatedNotification;
 use App\Traits\MediaUploadTrait;
+use Illuminate\Support\Facades\Notification;
 
 class StoreController extends Controller
 {
@@ -60,6 +63,9 @@ class StoreController extends Controller
         }
 
         $store = Store::create($validated);
+        $user = $request->user();
+        Notification::send($user, new StoreCreatedNotification($user));
+        // Notification::send($store, new StoreCreatedNotification($store));
         return ResponseFormatter::success("CREATED", 201, $store);
     }
 
