@@ -1,11 +1,13 @@
 <?php
 
+use App\Events\UserOrderMessage;
 use App\Http\Controllers\Auth\AuthenticateUserController;
 use App\Http\Controllers\Auth\RegisterUserController;
 use App\Http\Controllers\Auth\UserInformationController;
 use App\Http\Controllers\FoodController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\TransactionController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -42,5 +44,14 @@ Route::group($routeAttributes, function () {
         Route::apiResource("foods", FoodController::class)->except("index", "show");
         Route::get("/transactions", [TransactionController::class, "all"])->name("get.transaction");
         Route::put("/transactions/{id}", [TransactionController::class, "update"])->name("update.transaction");
+    });
+});
+
+
+
+Route::group(["as" => "chats", "prefix" => "chats"], function () {
+    Route::get('/send', function (Request $request) {
+        UserOrderMessage::dispatch("HELLIWW");
+        return "Hellow";
     });
 });
