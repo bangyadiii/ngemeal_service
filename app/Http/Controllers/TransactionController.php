@@ -9,7 +9,6 @@ use \Midtrans\Config;
 use App\Models\Transactions;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class TransactionController extends Controller
 {
@@ -31,7 +30,7 @@ class TransactionController extends Controller
         }
 
 
-        $trx = Transactions::with(["user", 'food'])->where("user_id", Auth::user()->id);
+        $trx = Transactions::with(["user", 'food'])->where("user_id", $request->user()->id);
 
         if ($food_id) {
             $trx->where("food_id", $food_id);
@@ -53,7 +52,7 @@ class TransactionController extends Controller
 
     public function checkout(CheckoutProductRequest $request)
     {
-        $user = Auth::user();
+        $user = $request->user();
         $trx = Transactions::create([
             "food_id" => $request->food_id,
             "user_id" => $request->user_id,
