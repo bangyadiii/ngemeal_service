@@ -153,8 +153,9 @@ return [
     */
 
     'custom' => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
+        'email' => [
+            'required' => 'Email input is required.',
+            'email' => 'Input valid email.',
         ],
     ],
 
