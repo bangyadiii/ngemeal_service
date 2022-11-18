@@ -55,15 +55,34 @@ class Handler extends ExceptionHandler
         $this->renderable(function (Throwable $th, Request $request) {
             if ($request->is("api/*")) {
                 if ($th instanceof ValidationException) {
-                    return ResponseFormatter::error(422, $th->getMessage(), $th->errors());
+                    return ResponseFormatter::error(
+                        $th->getMessage(),
+                        Response::HTTP_UNPROCESSABLE_ENTITY,
+                        $th->errors()
+                    );
                 } elseif ($th instanceof NotFoundHttpException) {
-                    return ResponseFormatter::error(Response::HTTP_NOT_FOUND, "NOT FOUND", $th->getMessage());
+
+                    return ResponseFormatter::error(
+                        "NOT FOUND",
+                        Response::HTTP_NOT_FOUND,
+                        $th->getMessage()
+                    );
                 } elseif ($th instanceof UnauthorizedHttpException) {
-                    return ResponseFormatter::error(Response::HTTP_UNAUTHORIZED, "Unauthorized", $th->getMessage());
+
+                    return ResponseFormatter::error(
+                        "Unauthorized",
+                        Response::HTTP_UNAUTHORIZED,
+                        $th->getMessage()
+                    );
                 } elseif ($th instanceof BadRequestHttpException) {
-                    return ResponseFormatter::error(Response::HTTP_BAD_REQUEST, "Bad Request", $th->getMessage());
+
+                    return ResponseFormatter::error(
+                        "Bad Request",
+                        Response::HTTP_BAD_REQUEST,
+                        $th->getMessage()
+                    );
                 } elseif ($th instanceof AccessDeniedHttpException) {
-                    return ResponseFormatter::error(Response::HTTP_FORBIDDEN, "Forbidden", $th->getMessage());
+                    return ResponseFormatter::error("Forbidden", Response::HTTP_FORBIDDEN, $th->getMessage());
                 }
             }
         });
