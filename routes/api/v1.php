@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::post("/login", [AuthenticateUserController::class, "login"])->name("login");
-Route::post("/register", [RegisterUserController::class, "store"])->name("login");
+Route::post("/register", [RegisterUserController::class, "store"])->name("register");
 
 Route::get("/foods", [FoodController::class, "index"])->name("get.food");
 Route::post("/checkout", [TransactionController::class, "checkout"])->name("checkout");
