@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
@@ -17,6 +19,7 @@ class User extends Authenticatable
     use HasProfilePhoto;
     use Notifiable;
     use TwoFactorAuthenticatable;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -27,7 +30,25 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'phone_number',
+        'address',
+        'house_number',
+        'city',
     ];
+
+    // relational
+    public function transactions()
+    {
+        return $this->hasMany(Transactions::class);
+    }
+    public function store()
+    {
+        return $this->hasOne(Store::class);
+    }
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, "user_roles");
+    }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -35,11 +56,13 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
+        "deleted_at",
         'password',
         'remember_token',
         'two_factor_recovery_codes',
         'two_factor_secret',
     ];
+
 
     /**
      * The attributes that should be cast.
@@ -58,4 +81,13 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function getCreatedAtAttribute($value)
+    {
+        return Carbon::parse($value)->timestamp;
+    }
+    public function getUpdatedAtAttribute($value)
+    {
+        return Carbon::parse($value)->timestamp;
+    }
 }
