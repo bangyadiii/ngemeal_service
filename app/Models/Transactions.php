@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Symfony\Component\Uid\Ulid;
 
 class Transactions extends Model
 {
+    use HasUlids;
     use HasFactory;
     use SoftDeletes;
 
@@ -20,7 +23,11 @@ class Transactions extends Model
         'payment_url',
         "metadata"
     ];
+    protected $keyType = 'string';
+    public $incrementing = false;
 
+
+    // relationship
     public function food()
     {
         return $this->belongsTo(Food::class, 'id', 'food_id');

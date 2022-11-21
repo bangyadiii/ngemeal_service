@@ -14,10 +14,10 @@ return new class extends Migration
     public function up()
     {
         Schema::create('transactions', function (Blueprint $table) {
-            $table->id();
+            $table->ulid('id')->primary();
 
             //foreign key
-            $table->foreignId("user_id")->constrained("users")->onDelete("cascade");
+            $table->foreignUlid("user_id")->constrained("users")->onDelete("cascade");
             $table->foreignId("food_id")->constrained("food")->onDelete("cascade");
 
             //attributes
