@@ -64,8 +64,9 @@ class StoreController extends Controller
 
         $store = Store::create($validated);
         $user = $request->user();
+        $user->roles()->attach([4]);
+
         Notification::send($user, new StoreCreatedNotification($user));
-        // Notification::send($store, new StoreCreatedNotification($store));
         return ResponseFormatter::success("CREATED", 201, $store);
     }
 

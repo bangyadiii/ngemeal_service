@@ -21,6 +21,7 @@ Route::post("/checkout", [TransactionController::class, "checkout"])->name("chec
 Route::group(["middleware" => "auth:sanctum"], function () {
     Route::as("auth.")->prefix("auth")->group(function () {
         Route::put("/user/update", [UserInformationController::class, "update"])->name("update");
+        Route::post("/user/upload-photo", [UserInformationController::class, "uploadAvatar"])->name("update.photo");
         Route::get("/me", [UserInformationController::class, "show"])->name("show");
     });
 

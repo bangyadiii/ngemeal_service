@@ -34,6 +34,7 @@ class RegisterUserRequest extends FormRequest
             "phone_number" => ["string", "min:8", "max:14"],
             "house_number" => ["string"],
             "city" => ["string"],
+            "profile_photo" => ["image", "mimes:png,jpg,webp", "max:2098"],
         ];
     }
 }
