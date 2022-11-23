@@ -30,7 +30,7 @@ class FoodStoreRequest extends FormRequest
             "price" => ["required", "numeric"],
             "rate" => ["numeric", "min:1", "max:5"],
             "types" => ["string"],
-            // "images" => ["file", "mimes:png,jpg,jpeg", "max:2096"]
+            "images" => ["file", "mimes:png,jpg,jpeg", "max:2096"]
         ];
     }
 }

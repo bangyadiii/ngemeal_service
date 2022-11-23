@@ -68,39 +68,53 @@ class FoodController extends Controller
     }
     public function store(FoodStoreRequest $request)
     {
-        $validatedData = $request->except("images");
+        $validatedData = $request->safe()->except("images");
+        $validatedData["store_id"] = $request->user()->store->id;
         $food = Food::create($validatedData);
         $imagesArr = array();
-        $files = $request->file('images', []);
-
         $this->checkAndCreateDirIfNotExist(self::$modelName);
-        foreach ($files as $key => $file) {
-            $isPrimary = $key == 0 ? true : false;
-            $imagePath = $this->storeMedia($file, self::$modelName, $isPrimary);
-            if (!$imagePath) {
-                return ResponseFormatter::error("Occur while uploading photo", 500, $imagesArr);
-            }
-            $imagePath['image_path'] = $imagePath;
-            $imagePath['is_primary'] = $isPrimary;
-            $imagesArr[] = $imagePath;
-        }
-        $food->images()->insert($imagesArr);
 
-        $food =  Food::with("images", 'store')->find($food->id);
-        return ResponseFormatter::success("CREATED", 201, $food);
+        $path = $this->storeMedia($request->images, self::$modelName);
+
+        if (!$path) {
+            return ResponseFormatter::error("Occur while uploading photo", 500, $imagesArr);
+        }
+        $imagePath['image_path'] = $path;
+        $imagePath['is_primary'] = 1;
+        $imagesArr[] = $imagePath;
+
+        $food->images()->createMany($imagesArr);
+
+        return ResponseFormatter::success("CREATED", 201, $food->load("images", "store"));
     }
 
     public function update(FoodUpdateRequest $request, Food $food)
     {
-        $data = $request->validated();
+        $data = $request->safe()->except('images');
         $food->fill($data)->save();
-        $food = Food::with("images", 'store')->find($food->id);
-        return ResponseFormatter::success("Food has been updated successfully", 200, $food);
+        return ResponseFormatter::success("Food has been updated successfully", 200, $food->load("images", "store"));
     }
 
     public function destroy(Food $food)
     {
-        $food->delete();
+        $food->deleteOrFail();
+
         return ResponseFormatter::success("Food has been deleted", 200);
+    }
+
+    public function forceDestroy(Food $food)
+    {
+        try {
+            $food->forceDelete();
+
+            if (\count($food->images) > 0) {
+                foreach ($food->images as  $image) {
+                    $this->removeMedia(\str_replace(\asset(""), "", $image->image_path));
+                }
+            }
+            return ResponseFormatter::success("Food has been deleted", 200);
+        } catch (\Throwable $th) {
+            return ResponseFormatter::error("Error occur", 500, $th->getMessage());
+        }
     }
 }

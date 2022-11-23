@@ -19,7 +19,6 @@ return new class extends Migration
             $table->foreignIdFor(Food::class);
             $table->string("image_path");
             $table->boolean("is_primary");
-            $table->timestamps();
         });
     }
 

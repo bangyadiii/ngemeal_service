@@ -14,6 +14,7 @@ class FoodImages extends Model
         "image_path",
         "is_primary"
     ];
+    public $timestamps = false;
 
     public function food()
     {

@@ -24,12 +24,12 @@ class Food extends Model
 
     public function transactions()
     {
-        $this->hasMany(Transactions::class);
+        return $this->hasMany(Transactions::class);
     }
 
     public function store()
     {
-        $this->belongsTo(Store::class);
+        return $this->belongsTo(Store::class);
     }
 
     // attributes
