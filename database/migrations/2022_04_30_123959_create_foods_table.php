@@ -14,9 +14,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('food', function (Blueprint $table) {
+        Schema::create('foods', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Store::class);
+            $table->foreignId("store_id")->nullable()->constrained("stores")->nullOnDelete();
             $table->string("name")->nullable();
             $table->longText("description")->nullable();
             $table->string("ingredients", 300)->nullable();
@@ -24,7 +24,7 @@ return new class extends Migration
             $table->double("rate")->nullable();
             $table->string("types")->nullable();
 
-            $table->timestamp("archived");
+            $table->timestamp("archived")->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
@@ -37,6 +37,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('food');
+        Schema::dropIfExists('foods');
     }
 };

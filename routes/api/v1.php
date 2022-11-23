@@ -29,4 +29,5 @@ Route::group(["middleware" => "auth:sanctum"], function () {
     Route::apiResource("foods", FoodController::class)->except("index", "show");
     Route::get("/transactions", [TransactionController::class, "all"])->name("get.transaction");
     Route::put("/transactions/{id}", [TransactionController::class, "update"])->name("update.transaction");
+    Route::post("/transactions/checkout", [TransactionController::class, "checkout"])->name("create.transaction");
 });

@@ -16,7 +16,7 @@ return new class extends Migration
     {
         Schema::create('food_images', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Food::class);
+            $table->foreignId("food_id")->constrained("foods")->cascadeOnDelete();
             $table->string("image_path");
             $table->boolean("is_primary");
         });

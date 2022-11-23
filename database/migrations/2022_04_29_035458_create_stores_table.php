@@ -16,11 +16,12 @@ return new class extends Migration
     {
         Schema::create('stores', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(User::class);
+            $table->ulid("user_id");
+            $table->foreign("user_id")->references("id")->on('users')->cascadeOnDelete();
             $table->string('store_name');
             $table->string('address');
             $table->string('description')->nullable();
-            $table->integer('rekening_number')->nullable();
+            $table->string('rekening_number')->nullable();
             $table->string('logo_path')->nullable();
             $table->softDeletes();
             $table->timestamps();

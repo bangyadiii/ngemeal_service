@@ -18,7 +18,7 @@ return new class extends Migration
 
             //foreign key
             $table->foreignUlid("user_id")->constrained("users")->onDelete("cascade");
-            $table->foreignId("food_id")->constrained("food")->onDelete("cascade");
+            $table->foreignId("food_id")->constrained("foods")->onDelete("cascade");
 
             //attributes
             $table->integer("total");

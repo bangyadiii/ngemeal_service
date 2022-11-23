@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Food>
  */
-class FoodFactory extends Factory
+class FoodImagesFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,12 +17,8 @@ class FoodFactory extends Factory
     public function definition()
     {
         return [
-            "name" => $this->faker->sentence(3),
-            "description" => $this->faker->paragraph(),
-            "ingredients" => $this->faker->paragraph(),
-            "price" => $this->faker->randomNumber(),
-            "rate" => \rand(1, 5),
-            "types" => $this->faker->sentence(1),
+            "image_path" => $this->faker->imageUrl(),
+            "is_primary" =>  false,
         ];
     }
 }
