@@ -5,10 +5,11 @@ namespace App\Http\Controllers;
 use App\Helpers\ResponseFormatter;
 use App\Http\Requests\CheckoutProductRequest;
 use App\Http\Requests\UpdateTransactionRequest;
-use \Midtrans\Config;
+use App\Models\Food;
 use App\Models\Transactions;
-use Exception;
+use App\Services\Midtrans\CreateSnapTokenService;
 use Illuminate\Http\Request;
+
 
 class TransactionController extends Controller
 {
@@ -44,7 +45,9 @@ class TransactionController extends Controller
 
     public function update(UpdateTransactionRequest $request, $id)
     {
-        $trx = Transactions::findOrFail($id);
+        $trx = Transactions::find($id);
+        \abort_if(!$trx, 404, "Transaction not found");
+
         $trx->fill($request->validated())->save();
 
         return ResponseFormatter::success("Trx has been updated", 200, $trx);
@@ -53,48 +56,32 @@ class TransactionController extends Controller
     public function checkout(CheckoutProductRequest $request)
     {
         $user = $request->user();
+        $product = Food::find($request->food_id);
+
+        \abort_if(!$product, 404, "Product not found.");
+
+        $grossAmount = $product->price * $request->quantity;
+
         $trx = Transactions::create([
-            "food_id" => $request->food_id,
-            "user_id" => $request->user_id,
+            "food_id" => $product->id,
+            "user_id" => $user->id,
             "quantity" => $request->quantity,
-            "total" => $request->total,
-            "status" => $request->status,
+            "total" => $grossAmount,
         ]);
 
-        // midtrans configuration
-        Config::$serverKey = config("services.midtrans.serverKey");
-        Config::$isProduction = config("services.midtrans.isProduction");
-        Config::$isSanitized = config("services.midtrans.isSanitized");
-        Config::$is3ds = config("services.midtrans.is3ds");
-
-        // create midtrans parameter
-
-        $customerDetails = [
-            "name" => $user->name,
-            "phone" => $user->phone,
-            "email" => $user->email,
-        ];
-        $trxDetail = [
-            "order_id" => $trx->id . "-" . rand(),
-            "gross_amout" => $trx->total,
-        ];
-        $midtransParam  = [
-            "transaction_details" => $trxDetail,
-            "customer_details" => $customerDetails
-        ];
 
         try {
-            $snapUrl = \Midtrans\Snap::createTransaction($midtransParam)->redirect_url;
+            $data = CreateSnapTokenService::createSnapUrl($trx);
 
-            $trx->fill(["redirect_url" => $snapUrl]);
+            $trx->forceFill([
+                "payment_url" => $data->redirect_url,
+                "md_snap_token" => $data->token,
+            ])->saveOrfail();
 
-            $trx->save();
-
-            return ResponseFormatter::success("Transaction Success.", 200, [
-                "transaction" => $trx
-            ]);
-        } catch (Exception $e) {
-            return ResponseFormatter::error("Transaction failed.", 500, $e->getMessage());
+            return ResponseFormatter::success("Transaction success.", 200, $trx->fresh());
+        } catch (\Throwable $th) {
+            $trx->forceDelete();
+            return ResponseFormatter::error("Failed to create transaction.", 500, $th->getMessage());
         }
     }
 }

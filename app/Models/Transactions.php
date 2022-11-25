@@ -19,22 +19,29 @@ class Transactions extends Model
         'user_id',
         'quantity',
         'total',
+        'md_trx_id',
         'status',
         'payment_url',
+        "md_snap_token",
         "metadata"
     ];
+
     protected $keyType = 'string';
     public $incrementing = false;
 
+    protected $hidden = [
+        "md_trx_id",
+        "deleted_at"
+    ];
 
     // relationship
     public function food()
     {
-        return $this->belongsTo(Food::class, 'id', 'food_id');
+        return $this->belongsTo(Food::class);
     }
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'id', 'user_id');
+        return $this->belongsTo(User::class);
     }
 }

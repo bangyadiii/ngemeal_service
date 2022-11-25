@@ -21,8 +21,8 @@ return new class extends Migration
             $table->foreignId("food_id")->constrained("foods")->onDelete("cascade");
 
             //attributes
-            $table->integer("total");
-            $table->integer("quantity");
+            $table->integer("total")->unsigned();
+            $table->integer("quantity")->unsigned();
             $table->enum("status", ["failed", "pending", "success"])->default("pending");
             $table->string("payment_url")->nullable(); //midtrans snap url
 

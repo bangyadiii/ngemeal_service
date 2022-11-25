@@ -13,6 +13,10 @@ class PaymentLog extends Model
 
 
     protected $fillable = [
-        "order_id", "gross_amount", "quantity", "raw"
+        "trx_id",
+        "md_trx_id",
+        "gross_amount",
+        "quantity",
+        "raw"
     ];
 }

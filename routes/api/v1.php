@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AuthenticateUserController;
 use App\Http\Controllers\Auth\RegisterUserController;
 use App\Http\Controllers\Auth\UserInformationController;
 use App\Http\Controllers\FoodController;
+use App\Http\Controllers\MidtransCallbackController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Route;
@@ -31,3 +32,5 @@ Route::group(["middleware" => "auth:sanctum"], function () {
     Route::put("/transactions/{id}", [TransactionController::class, "update"])->name("update.transaction");
     Route::post("/transactions/checkout", [TransactionController::class, "checkout"])->name("create.transaction");
 });
+
+Route::any("/trx/notifications", [MidtransCallbackController::class, "callback"])->name("midtrans.notif");

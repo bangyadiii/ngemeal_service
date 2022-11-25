@@ -24,11 +24,8 @@ class CheckoutProductRequest extends FormRequest
     public function rules()
     {
         return [
-            "user_id" => ["required", "exists:users,id"],
-            "food_id" => ["required", "exists:food,id"],
+            "food_id" => ["required", "numeric"],
             "quantity" => ["required", "numeric", "min:1"],
-            "total" => ["required", "numeric", "min:1"],
-            "status" => ["string", "in:failed,pending,success"]
         ];
     }
 }

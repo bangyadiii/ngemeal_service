@@ -14,7 +14,13 @@ class Food extends Model
     public $table = "foods";
 
     protected $fillable =  [
-        'store_id', 'name', 'description', 'ingredients', 'price', 'rate', 'types'
+        'store_id',
+        'name',
+        'description',
+        'ingredients',
+        'price',
+        'rate',
+        'types'
     ];
 
     //relations

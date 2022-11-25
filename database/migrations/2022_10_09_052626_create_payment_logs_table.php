@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('payment_logs', function (Blueprint $table) {
             $table->id();
-            $table->string("order_id");
+            $table->string("md_trx_id");
             $table->foreignUlid("trx_id")->constrained("transactions")->onDelete("cascade");
             $table->integer("gross_amount");
 
