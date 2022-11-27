@@ -29,11 +29,12 @@ class RegisterUserRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => $this->passwordRules(),
-            'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
+            "address" => ["string"],
             "phone_number" => ["string", "min:8", "max:14"],
             "house_number" => ["string"],
             "city" => ["string"],
+            'password' => $this->passwordRules(),
+            'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
             "profile_photo" => ["image", "mimes:png,jpg,webp", "max:2098"],
         ];
     }

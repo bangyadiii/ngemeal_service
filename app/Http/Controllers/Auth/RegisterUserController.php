@@ -19,8 +19,15 @@ class RegisterUserController extends Controller
         $user = User::create($validated);
         $user->roles()->attach(Role::where("slug", "user")->orWhere("slug", "customer")->get());
 
+        $roles = $user->roles->pluck("slug")->all();
+        $accessToken = $user->createToken($request->header("user-agent"), $roles)->plainTextToken;
+
         NewUserRegistered::dispatch($user);
 
-        return ResponseFormatter::success("OK", 200, $user);
+        return ResponseFormatter::success("OK", 200, [
+            "access_token" => $accessToken,
+            "token_type" => "Bearer",
+            "user" => $user
+        ]);
     }
 }
