@@ -33,7 +33,8 @@ class AuthenticateUserController extends Controller
 
         $roles = $user->roles->pluck("slug")->all();
 
-        $accessToken = $user->createToken($request->device_name, $roles)->plainTextToken;
+        $device = $request->header("user-agent");
+        $accessToken = $user->createToken($device, $roles)->plainTextToken;
 
         return ResponseFormatter::success("Authorization success.", 200, [
             "access_token" => $accessToken,
