@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class CreateNewUserStoreRequest extends FormRequest
 {
@@ -14,7 +15,7 @@ class CreateNewUserStoreRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return $this->user()->can("create", App\Models\Store::class);
     }
 
     /**

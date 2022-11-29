@@ -77,6 +77,11 @@ class User extends Authenticatable
         return $this->role_id == 3;
     }
 
+    public function hasStore()
+    {
+        return $this->store !== null;
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

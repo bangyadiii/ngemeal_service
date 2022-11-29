@@ -10,6 +10,7 @@ use App\Http\Requests\UpdateStoreRequest;
 use App\Models\User;
 use App\Notifications\StoreCreatedNotification;
 use App\Traits\MediaUploadTrait;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 
 class StoreController extends Controller
@@ -46,7 +47,6 @@ class StoreController extends Controller
 
     public function store(CreateNewUserStoreRequest $request)
     {
-
         $validated = $request->safe()->except('logo');
         $validated['user_id'] = $request->user()->id;
 
@@ -95,7 +95,13 @@ class StoreController extends Controller
 
     public function destroy(Store $store)
     {
-        $store->deleteOrFail();
+        $this->authorize("delete", $store);
+        $user = request()->user();
+        DB::transaction(function () use ($store, $user) {
+            $store->deleteOrFail();
+            $user->roles()->associate(3)->saveOrFail();
+        }, 5);
+
         return ResponseFormatter::success("Store has been deleted.", 200);
     }
 }

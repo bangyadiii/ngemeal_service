@@ -13,7 +13,8 @@ class UpdateStoreRequest extends FormRequest
      */
     public function authorize()
     {
-        request()->user()->tokenCan("store:update");
+        \info($this->store);
+        return $this->user()->can("update", $this->store);
     }
 
     /**
@@ -24,11 +25,11 @@ class UpdateStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            "store_name" => ['optional', 'string'],
-            "address" => ['optional', 'string'],
-            "address" => ['optional', 'string'],
-            "rekening_number" => ['optional', 'numeric'],
-            "logo" => ['optional', 'file', "mimes:png,jpg,jpeg,svg"],
+            "store_name" => ['string'],
+            "address" => ['string'],
+            "address" => ['string'],
+            "rekening_number" => ['numeric'],
+            "logo" => ['file', "mimes:png,jpg,jpeg,svg"],
         ];
     }
 }
