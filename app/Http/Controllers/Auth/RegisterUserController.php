@@ -16,11 +16,14 @@ class RegisterUserController extends Controller
     {
         $validated = $request->validated();
         $validated["password"] = Hash::make($validated["password"]);
-        $user = User::create($validated);
-        $user->roles()->attach(Role::where("slug", "user")->orWhere("slug", "customer")->get());
+        $user = new User($validated);
+        $user->roles()
+            ->associate(Role::where("slug", "customer")->first())
+            ->saveOrFail();
 
-        $roles = $user->roles->pluck("slug")->toArray();
-        $accessToken = $user->createToken($request->header("user-agent"), $roles)->plainTextToken;
+
+        $roles = $user->roles->slug;
+        $accessToken = $user->createToken($request->header("user-agent"), [$roles])->plainTextToken;
 
         NewUserRegistered::dispatch($user);
 
