@@ -31,7 +31,7 @@ class AuthenticateUserController extends Controller
         // delete previous token 
         $user->tokens()->where("name", $request->device_name)->delete();
 
-        $roles = $user->roles->pluck("slug")->all();
+        $roles = $user->roles->slug;
 
         $device = $request->header("user-agent");
         $accessToken = $user->createToken($device, $roles)->plainTextToken;
