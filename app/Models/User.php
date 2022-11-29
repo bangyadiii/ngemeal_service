@@ -40,6 +40,7 @@ class User extends Authenticatable
         'address',
         'house_number',
         'city',
+        "role_id"
     ];
 
     // relational
@@ -53,7 +54,27 @@ class User extends Authenticatable
     }
     public function roles()
     {
-        return $this->belongsToMany(Role::class, "user_roles");
+        return $this->belongsTo(Role::class, "role_id");
+    }
+
+    public function isAdmin()
+    {
+        return $this->role_id == 2;
+    }
+
+    public function isSuper()
+    {
+        return $this->role_id == 1;
+    }
+
+    public function isSeller()
+    {
+        return $this->role_id == 4;
+    }
+
+    public function isCustomer()
+    {
+        return $this->role_id == 3;
     }
 
     /**

@@ -46,7 +46,8 @@ class StoreController extends Controller
 
     public function store(CreateNewUserStoreRequest $request)
     {
-        $validated = $request->except('logo');
+
+        $validated = $request->safe()->except('logo');
         $validated['user_id'] = $request->user()->id;
 
         $this->checkAndCreateDirIfNotExist(self::$modelName);
@@ -64,7 +65,8 @@ class StoreController extends Controller
 
         $store = Store::create($validated);
         $user = $request->user();
-        $user->roles()->attach([4]);
+        $user->role_id = 4; // 4 is seller role
+        $user->save();
 
         Notification::send($user, new StoreCreatedNotification($user));
         return ResponseFormatter::success("CREATED", 201, $store);

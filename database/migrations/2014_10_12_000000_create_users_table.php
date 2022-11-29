@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string("house_number")->nullable();
             $table->string("phone_number")->nullable();
             $table->string("city")->nullable();
-            $table->foreignId('current_team_id')->nullable();
+            $table->foreignId('role_id')->nullable()->constrained("roles")->nullOnDelete();
             $table->string('profile_photo_path', 2048)->nullable();
             $table->softDeletes();
             $table->timestamps();

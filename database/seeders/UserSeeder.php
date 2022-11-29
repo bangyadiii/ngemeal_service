@@ -21,16 +21,16 @@ class UserSeeder extends Seeder
             'email' => 'admin@mail.com',
             'password' => \bcrypt("password"),
         ]);
-        $customerRole = Role::where("slug", "customer")->first();
-        $sellerRole = Role::where("slug", "seller")->first();
+        $superAdm = Role::where("slug", "super")->first();
 
-        $user->roles()->attach(Role::where("slug", "admin")->first());
-        $user->roles()->attach([$customerRole->id]);
+        $user->roles()->associate($superAdm)->save();
 
-        User::factory(10)->hasStore()
-            ->hasAttached($sellerRole)->create();
+        User::factory(10)
+            ->seller()
+            ->hasStore()
+            ->create();
 
         User::factory(100)
-            ->hasAttached($customerRole)->create();
+            ->create();
     }
 }

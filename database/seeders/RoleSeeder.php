@@ -22,12 +22,10 @@ class RoleSeeder extends Seeder
         Schema::enableForeignKeyConstraints();
 
         $roles = [
+            ['name' => 'Super Admin', 'slug' => 'super'],
             ['name' => 'Administrator', 'slug' => 'admin'],
-            ['name' => 'User', 'slug' => 'user'],
             ['name' => 'Customer', 'slug' => 'customer'],
             ['name' => 'Seller', 'slug' => 'seller'],
-            ['name' => 'All', 'slug' => '*'],
-            ['name' => 'Super Admin', 'slug' => 'super-admin'],
         ];
 
         collect($roles)->each(function ($role) {
