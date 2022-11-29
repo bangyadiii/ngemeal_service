@@ -17,7 +17,7 @@ class FoodImagesFactory extends Factory
     public function definition()
     {
         return [
-            "image_path" => $this->faker->imageUrl(),
+            "image_path" => \asset("assets/download.png"),
             "is_primary" =>  false,
         ];
     }
