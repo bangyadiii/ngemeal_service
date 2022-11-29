@@ -79,7 +79,7 @@ class FoodController extends Controller
         if (!$path) {
             return ResponseFormatter::error("Occur while uploading photo", 500, $imagesArr);
         }
-        $imagePath['image_path'] = $path;
+        $imagePath['image_path'] = asset("storage/$path");
         $imagePath['is_primary'] = 1;
         $imagesArr[] = $imagePath;
 
