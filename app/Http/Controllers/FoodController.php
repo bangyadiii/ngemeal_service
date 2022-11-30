@@ -69,7 +69,6 @@ class FoodController extends Controller
     public function store(FoodStoreRequest $request)
     {
         $validatedData = $request->safe()->except("images");
-        $validatedData["store_id"] = $request->user()->store->id;
         $food = Food::create($validatedData);
         $imagesArr = array();
         $this->checkAndCreateDirIfNotExist(self::$modelName);

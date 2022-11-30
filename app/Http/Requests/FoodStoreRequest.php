@@ -24,6 +24,7 @@ class FoodStoreRequest extends FormRequest
     public function rules()
     {
         return [
+            "store_id" => ["required", "exists:stores,id"],
             "name" => ["required", "string"],
             "description" => ["required", "string"],
             "ingredients" => ["string"],
