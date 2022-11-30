@@ -13,7 +13,7 @@ class FoodUpdateRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return $this->user()->can("update", $this->food);
     }
 
     /**
@@ -30,7 +30,6 @@ class FoodUpdateRequest extends FormRequest
             "price" => ["numeric"],
             "rate" => ["numeric", "min:1", "max:5"],
             "types" => ["string"],
-
         ];
     }
 }

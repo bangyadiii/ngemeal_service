@@ -8,6 +8,7 @@ use App\Http\Requests\FoodUpdateRequest;
 use App\Models\Food;
 use Illuminate\Http\Request;
 use App\Traits\MediaUploadTrait;
+use Illuminate\Support\Facades\Storage;
 
 class FoodController extends Controller
 {
@@ -78,7 +79,7 @@ class FoodController extends Controller
         if (!$path) {
             return ResponseFormatter::error("Occur while uploading photo", 500, $imagesArr);
         }
-        $imagePath['image_path'] = asset("storage/$path");
+        $imagePath['image_path'] = $path;
         $imagePath['is_primary'] = 1;
         $imagesArr[] = $imagePath;
 
@@ -89,8 +90,8 @@ class FoodController extends Controller
 
     public function update(FoodUpdateRequest $request, Food $food)
     {
-        $data = $request->safe()->except('images');
-        $food->fill($data)->save();
+        $data = $request->safe()->except("images");
+        $food->forceFill($data)->saveOrFail();
         return ResponseFormatter::success("Food has been updated successfully", 200, $food->load("images", "store"));
     }
 

@@ -53,7 +53,7 @@ class FoodPolicy
      */
     public function update(User $user, Food $food)
     {
-        //
+        return $user->isSeller() && $user->store->id == $food->store_id;
     }
 
     /**
