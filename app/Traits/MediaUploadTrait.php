@@ -23,7 +23,7 @@ trait MediaUploadTrait
 
     public function removeMedia(string $path): bool
     {
-        $isDeleted = Storage::disk('public')->delete($path);
+        $isDeleted = Storage::disk()->delete($path);
         \throw_if(!$isDeleted, FileException::class, "Can't delete the file.");
 
         return true;
