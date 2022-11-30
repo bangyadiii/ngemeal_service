@@ -14,10 +14,10 @@ trait MediaUploadTrait
     public function storeMedia(UploadedFile $file, $modelName): string
     {
         $name = \uniqid() . '-' . $file->getClientOriginalName();
-        $filePath = Storage::putFileAs("tmp/$modelName", $file, $name);
+        $filePath = $file->storePubliclyAs("tmp/$modelName", $name);
         \throw_if(!$filePath, FileException::class, "Cannot upload media.");
 
-        return $filePath;
+        return Storage::url($filePath);
     }
 
 
