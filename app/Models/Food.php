@@ -20,7 +20,8 @@ class Food extends Model
         'ingredients',
         'price',
         'rate',
-        'types'
+        'types',
+        'view_count'
     ];
 
     //relations

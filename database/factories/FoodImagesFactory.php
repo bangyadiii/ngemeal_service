@@ -19,7 +19,6 @@ class FoodImagesFactory extends Factory
         return [
             "image_path" => "tmp/food/6388280d329b6-male-avatar-profile-icon-of-smiling-caucasian-man-vector.jpg",
             "image_url" => "https://ngemeal-bucket.s3.ap-southeast-1.amazonaws.com/tmp/food/6388280d329b6-male-avatar-profile-icon-of-smiling-caucasian-man-vector.jpg",
-            "priority" =>  1,
         ];
     }
 }

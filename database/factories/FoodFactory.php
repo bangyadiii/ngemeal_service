@@ -23,6 +23,7 @@ class FoodFactory extends Factory
             "price" => $this->faker->randomNumber(),
             "rate" => \rand(1, 5),
             "types" => $this->faker->sentence(1),
+            "view_count" => \random_int(10, 100000),
         ];
     }
 }

@@ -18,9 +18,13 @@ class FoodSeeder extends Seeder
     public function run()
     {
         Food::factory(100)
-            ->hasImages(3)
+            ->hasImages(3, new Sequence(fn ($seq) => [
+                "is_primary" => $seq->index % 3 == 0 ? true : false
+            ]))
             ->state(new Sequence(
-                fn ($sequence) => ["store_id" => Store::all()->random()]
+                fn ($sequence) => [
+                    "store_id" => Store::all()->random(),
+                ]
             ))
             ->create();
     }

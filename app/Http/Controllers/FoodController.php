@@ -27,10 +27,15 @@ class FoodController extends Controller
 
         $rate_from = $request->input("rate_from");
         $rate_to = $request->input("rate_to");
-
+        $category = $request->input("category");
+        $view_count_from = null;
+        $orderByCol = null;
+        $orderByType = null;
 
         if ($id) {
             $food = Food::with("images", "store")->find($id);
+            $food->view_count++;
+            $food->save();
 
             if ($food) {
                 return ResponseFormatter::error("Food not found", 404);
@@ -38,6 +43,20 @@ class FoodController extends Controller
             return ResponseFormatter::success("OK", 200, $food);
         }
 
+        if ($category === "murah" && !$price_to  && !$price_from) {
+            $price_to = 25000;
+        } elseif ($category === "populer") {
+            $rate_from = 4;
+            $view_count_from =  2000;
+            $orderByCol = "view_count";
+            $orderByType = "desc";
+        } elseif ($category === "rekomendasi") {
+            $rate_from = 4;
+            $view_count_from =  2000;
+            $price_to = 25000;
+            $orderByCol = "rate";
+            $orderByType = "desc";
+        }
 
         $food = Food::query();
 
@@ -47,6 +66,7 @@ class FoodController extends Controller
         if ($types) {
             $food->where("types", "like", "%" . $types . "%");
         }
+
         if ($price_from) {
             $food->where("price", ">=", $price_from);
         }
@@ -59,12 +79,22 @@ class FoodController extends Controller
         if ($rate_to) {
             $food->where("rate", "<=", $rate_to);
         }
+        if ($view_count_from) {
+            $food->where("view_count", ">=", $view_count_from);
+        }
+
+        if ($orderByCol && $orderByType) {
+            $food->orderBy($orderByCol, $orderByType);
+        }
 
 
         return ResponseFormatter::success(
             "Product list berhasil diambil",
             200,
-            $food->with("images", 'store')->paginate($limit)
+            $food->with(["images" => function ($query) {
+                $query->where('is_primary', true);
+                return $query;
+            }, "store"])->paginate($limit)
         );
     }
     public function store(FoodStoreRequest $request)

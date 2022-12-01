@@ -19,26 +19,21 @@ class FoodImagesController extends Controller
         $imagesArr = array();
         $this->checkAndCreateDirIfNotExist(self::$modelName);
 
-        if ($image1 = $request->images_1) {
-            $this->uploadAndCheck($image1, $request->priority_1, $imagesArr);
+        if ($image1 = $request->images_primary) {
+            $this->uploadAndCheck($image1, true, $imagesArr);
         }
 
-        if ($image2 = $request->images_2) {
-
-            $this->uploadAndCheck($image2, $request->priority_2, $imagesArr);
+        if ($request->hasFile("images")) {
+            foreach ($request->file("images", []) as $img) {
+                $this->uploadAndCheck($img, false, $imagesArr);
+            }
         }
-
-        if ($image3 = $request->images_4) {
-
-            $this->uploadAndCheck($image3, $request->priority_3, $imagesArr);
-        }
-
         $food->images()->createMany($imagesArr);
 
         return ResponseFormatter::success("CREATED", 201, $food->load("images"));
     }
 
-    function uploadAndCheck(UploadedFile $file, $priority, &$array)
+    function uploadAndCheck(UploadedFile $file, $isPrimary, &$array)
     {
         $path = $this->storeMedia($file, self::$modelName);
 
@@ -47,7 +42,7 @@ class FoodImagesController extends Controller
         }
         $imagePath['image_path'] = $path;
         $imagePath['image_url'] = Storage::url($path);
-        $imagePath['priority'] = $priority;
+        $imagePath['is_primary'] = $isPrimary;
         $array[] = $imagePath;
 
         return $array;

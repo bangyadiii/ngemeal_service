@@ -13,7 +13,7 @@ class FoodImages extends Model
         "food_id",
         "image_path",
         "image_url",
-        "priority",
+        "is_primary",
     ];
     public $timestamps = false;
 
