@@ -7,7 +7,6 @@ use App\Models\Store;
 use Illuminate\Http\Request;
 use App\Helpers\ResponseFormatter;
 use App\Http\Requests\UpdateStoreRequest;
-use App\Models\User;
 use App\Notifications\StoreCreatedNotification;
 use App\Traits\MediaUploadTrait;
 use Illuminate\Support\Facades\DB;
@@ -25,7 +24,7 @@ class StoreController extends Controller
         $limit = \intval($request->limit) || 20;
 
         if ($id) {
-            $store = Store::with('users', 'food')->find($id);
+            $store = Store::with('user', 'food')->find($id);
 
             if (!$store) {
                 return ResponseFormatter::error("NOT FOUND", 404, "Store not found.");

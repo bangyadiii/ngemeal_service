@@ -18,6 +18,7 @@ Route::post("/register", [RegisterUserController::class, "store"])->name("regist
 
 Route::get("/foods", [FoodController::class, "index"])->name("get.food");
 Route::post("/checkout", [TransactionController::class, "checkout"])->name("checkout");
+Route::get("/store", [StoreController::class, "index"])->name("store.index");
 
 // should authenticated
 Route::group(["middleware" => "auth:sanctum"], function () {
