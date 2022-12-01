@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AuthenticateUserController;
 use App\Http\Controllers\Auth\RegisterUserController;
 use App\Http\Controllers\Auth\UserInformationController;
 use App\Http\Controllers\FoodController;
+use App\Http\Controllers\FoodImagesController;
 use App\Http\Controllers\MidtransCallbackController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\TransactionController;
@@ -28,6 +29,7 @@ Route::group(["middleware" => "auth:sanctum"], function () {
 
     Route::apiResource("store", StoreController::class)->except("index", "show");
     Route::apiResource("foods", FoodController::class)->except("index", "show");
+    Route::post("/foods/upload-photo/{food}", [FoodImagesController::class, "store"])->name(".food.upload-images");
     Route::get("/transactions", [TransactionController::class, "all"])->name("get.transaction");
     Route::put("/transactions/{id}", [TransactionController::class, "update"])->name("update.transaction");
     Route::post("/transactions/checkout", [TransactionController::class, "checkout"])->name("create.transaction");
