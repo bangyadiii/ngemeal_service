@@ -11,6 +11,7 @@ use App\Notifications\StoreCreatedNotification;
 use App\Traits\MediaUploadTrait;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Storage;
 
 class StoreController extends Controller
 {
@@ -59,7 +60,7 @@ class StoreController extends Controller
                     "Failed to upload images."
                 );
             }
-            $validated['logo_path'] = $filePath;
+            $validated['logo_path'] = Storage::url($filePath);
         }
 
         $store = Store::create($validated);
