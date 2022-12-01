@@ -71,19 +71,6 @@ class FoodController extends Controller
     {
         $validatedData = $request->safe()->except("images");
         $food = Food::create($validatedData);
-        $imagesArr = array();
-        $this->checkAndCreateDirIfNotExist(self::$modelName);
-
-        $path = $this->storeMedia($request->images, self::$modelName);
-
-        if (!$path) {
-            return ResponseFormatter::error("Occur while uploading photo", 500, $imagesArr);
-        }
-        $imagePath['image_path'] = $path;
-        $imagePath['is_primary'] = 1;
-        $imagesArr[] = $imagePath;
-
-        $food->images()->createMany($imagesArr);
 
         return ResponseFormatter::success("CREATED", 201, $food->load("images", "store"));
     }
@@ -98,7 +85,11 @@ class FoodController extends Controller
     public function destroy(Food $food)
     {
         $food->deleteOrFail();
-
+        if (\count($food->images) > 0) {
+            foreach ($food->images as  $image) {
+                $this->removeMedia($image->image_path);
+            }
+        }
         return ResponseFormatter::success("Food has been deleted", 200);
     }
 
@@ -109,7 +100,7 @@ class FoodController extends Controller
 
             if (\count($food->images) > 0) {
                 foreach ($food->images as  $image) {
-                    $this->removeMedia(\str_replace(\asset(""), "", $image->image_path));
+                    $this->removeMedia($image->image_path);
                 }
             }
             return ResponseFormatter::success("Food has been deleted", 200);

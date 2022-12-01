@@ -12,7 +12,8 @@ class FoodImages extends Model
     protected $fillable = [
         "food_id",
         "image_path",
-        "is_primary"
+        "image_url",
+        "priority",
     ];
     public $timestamps = false;
 

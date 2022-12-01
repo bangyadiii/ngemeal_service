@@ -17,7 +17,7 @@ trait MediaUploadTrait
         $filePath = $file->storePubliclyAs("tmp/$modelName", $name);
         \throw_if(!$filePath, FileException::class, "Cannot upload media.");
 
-        return Storage::url($filePath);
+        return $filePath;
     }
 
 

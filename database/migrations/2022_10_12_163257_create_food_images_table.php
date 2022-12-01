@@ -18,7 +18,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId("food_id")->constrained("foods")->cascadeOnDelete();
             $table->string("image_path");
-            $table->boolean("is_primary");
+            $table->string("image_url");
+            $table->integer("priority")->default(0);
         });
     }
 
