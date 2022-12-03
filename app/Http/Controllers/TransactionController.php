@@ -61,12 +61,17 @@ class TransactionController extends Controller
         \abort_if(!$product, 404, "Product not found.");
 
         $grossAmount = $product->price * $request->quantity;
+        $metadata = \json_encode([
+            "user" => $user,
+            "product" => $product,
+        ]);
 
         $trx = Transactions::create([
             "food_id" => $product->id,
             "user_id" => $user->id,
             "quantity" => $request->quantity,
             "total" => $grossAmount,
+            "metadata" => $metadata,
         ]);
 
 

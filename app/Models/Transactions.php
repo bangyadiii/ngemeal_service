@@ -20,7 +20,8 @@ class Transactions extends Model
         'quantity',
         'total',
         'md_trx_id',
-        'status',
+        'trx_status',
+        'delivery_status',
         'payment_url',
         "md_snap_token",
         "metadata"

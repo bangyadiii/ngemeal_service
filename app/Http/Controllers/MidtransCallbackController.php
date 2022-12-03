@@ -24,16 +24,18 @@ class MidtransCallbackController extends Controller
     public function callback(Request $request)
     {
         $notif = new Notification();
-        $validSignatureKey =  hash(
-            'sha512',
-            $request->order_id .
-                $request->status_code .
-                $request->gross_amount .
-                Config::$serverKey
-        );
+        if (!\app()->environment("local")) {
+            $validSignatureKey =  hash(
+                'sha512',
+                $request->order_id .
+                    $request->status_code .
+                    $request->gross_amount .
+                    Config::$serverKey
+            );
 
-        if ($validSignatureKey !== $request->signature_key && !\app()->environment("local")) {
-            throw new BadRequestHttpException("Signature key is not valid");
+            if ($validSignatureKey !== $request->signature_key) {
+                throw new BadRequestHttpException("Signature key is not valid");
+            }
         }
 
         $transaction = $notif->transaction_status;
@@ -43,6 +45,7 @@ class MidtransCallbackController extends Controller
         try {
             $trx = Transactions::find($orderId);
             \abort_if(!$trx, 404, "Transaction not found");
+            $trx->fill(["md_trx_id" => $notif->transaction_id])->save();
 
             if ($transaction == 'capture') {
                 if ($fraud == 'challenge') {

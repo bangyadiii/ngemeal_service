@@ -23,7 +23,9 @@ return new class extends Migration
             //attributes
             $table->integer("total")->unsigned();
             $table->integer("quantity")->unsigned();
-            $table->enum("status", ["failed", "pending", "success"])->default("pending");
+            $table->enum("trx_status", ["failed", "pending", "success"])->default("pending");
+            $table->enum("delivery_status", ["cancelled", "waiting_driver", "on_delivery", "finish", "failed"])
+                ->default("waiting_driver");
             $table->string("payment_url")->nullable(); //midtrans snap url
 
             // metadata adalah informasi detail kecil tentang product yang dibeli, contoh nama product, catatan, dll.
