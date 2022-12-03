@@ -69,7 +69,7 @@ class MidtransCallbackController extends Controller
                 "trx_id" => $trx->id,
                 "md_trx_id" => $notif->transaction_id,
                 "gross_amount" => $notif->gross_amount,
-                "raw" => \json_encode($notif),
+                "raw" => \json_encode(\collect($notif)),
             ]);
 
             $trx->saveOrFail();
