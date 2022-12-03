@@ -45,16 +45,16 @@ class MidtransCallbackController extends Controller
         try {
             $trx = Transactions::find($orderId);
             \abort_if(!$trx, 404, "Transaction not found");
-            $trx->fill(["md_trx_id" => $notif->transaction_id])->save();
+            $trx->fill(["md_trx_id" => $notif->transaction_id]);
 
             if ($transaction == 'capture') {
                 if ($fraud == 'challenge') {
-                    $trx->status = "pending";
+                    $trx->trx_status = "pending";
                 } elseif ($fraud == 'accept') {
-                    $trx->status = "success";
+                    $trx->trx_status = "success";
                 }
             } elseif ($transaction == 'settlement') {
-                $trx->status = "success";
+                $trx->trx_status = "success";
             } elseif (
                 $transaction == 'cancel' ||
                 $transaction == 'deny' ||
@@ -62,7 +62,7 @@ class MidtransCallbackController extends Controller
             ) {
                 $trx->status = "failed";
             } elseif ($transaction == 'pending') {
-                $trx->status = "pending";
+                $trx->trx_status = "pending";
             }
 
             PaymentLog::create([
