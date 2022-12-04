@@ -24,6 +24,7 @@ class CheckoutProductRequest extends FormRequest
     public function rules()
     {
         return [
+            "mode" => ["required", "in:snap-token,redirect_url,sdk"],
             "food_id" => ["required", "numeric"],
             "quantity" => ["required", "numeric", "min:1"],
         ];

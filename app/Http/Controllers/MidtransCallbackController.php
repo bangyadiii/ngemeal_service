@@ -27,8 +27,10 @@ class MidtransCallbackController extends Controller
     {
         if (!app()->environment("local")) {
             $this->notif = new Notification();
+            \info("hello world");
         } else {
-            $this->notif = $request->all();
+            $this->notif = $request;
+            \info("aa ");
         }
 
         if (!\app()->environment("local")) {
@@ -39,7 +41,7 @@ class MidtransCallbackController extends Controller
 
         $transaction = $this->notif->transaction_status;
         $fraud = $this->notif->fraud_status;
-        $orderId = \app()->environment("local") ? $request->order_id : $this->notif->order_id;
+        $orderId = $this->notif->order_id;
 
         try {
             $trx = Transactions::find($orderId);

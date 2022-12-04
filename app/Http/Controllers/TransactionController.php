@@ -59,10 +59,11 @@ class TransactionController extends Controller
 
     public function checkout(CheckoutProductRequest $request)
     {
+        $mode = $request->mode;
         $user = $request->user();
         $product = Food::find($request->food_id);
 
-        \abort_if(!$product, 404, "Product not found.");
+        abort_if(!$product, 404, "Product not found.");
 
         $grossAmount = $product->price * $request->quantity;
         $metadata = \json_encode([
@@ -87,7 +88,11 @@ class TransactionController extends Controller
                 "md_snap_token" => $data->token,
             ])->saveOrfail();
 
-            return ResponseFormatter::success("Transaction success.", 200, $trx->fresh());
+            return ResponseFormatter::success("Transaction success.", 200, [
+                "order_id" => $trx->id,
+                "payment_url" => $trx->payment_url,
+                "snap_token" => $trx->md_snap_token
+            ]);
         } catch (\Throwable $th) {
             $trx->forceDelete();
             return ResponseFormatter::error("Failed to create transaction.", 500, $th->getMessage());
