@@ -17,7 +17,8 @@ class TransactionController extends Controller
     {
         $id = $request->input("food_id");
         $food_id = $request->input("food_id");
-        $status = $request->input("status");
+        $TrxStatus = $request->input("trx_status");
+        $DelStatus = $request->input("delivery_status");
 
         $limit = $request->input("limit", 6);
 
@@ -36,8 +37,11 @@ class TransactionController extends Controller
         if ($food_id) {
             $trx->where("food_id", $food_id);
         }
-        if ($status) {
-            $trx->where("name", $status);
+        if ($TrxStatus) {
+            $trx->where("trx_status", $TrxStatus);
+        }
+        if ($DelStatus) {
+            $trx->where("delivery_status", $DelStatus);
         }
 
         return ResponseFormatter::success("Transaction list berhasil diambil", 200, $trx->paginate($limit));

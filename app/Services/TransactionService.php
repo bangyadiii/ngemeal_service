@@ -47,13 +47,13 @@ class TransactionService
         // }
     }
 
-    public static function processPaymentStatus($notif, $trx)
+    public static function processPaymentStatus($this->notif, $trx)
     {
-        $status = $notif->transaction_status;
-        $fraud = $notif->fraud_status;
+        $status = $this->notif->transaction_status;
+        $fraud = $this->notif->fraud_status;
 
 
-        if ($notif->status == 'capture') {
+        if ($this->notif->status == 'capture') {
             if ($fraud == 'challenge') {
                 $trx->status = "pending";
             } elseif ($fraud == 'accept') {
@@ -75,9 +75,9 @@ class TransactionService
 
         PaymentLog::create([
             "trx_id" => $trx->id,
-            "md_trx_id" => $notif->transaction_id,
-            "gross_amount" => $notif->gross_amount,
-            "raw" => \json_encode($notif),
+            "md_trx_id" => $this->notif->transaction_id,
+            "gross_amount" => $this->notif->gross_amount,
+            "raw" => \json_encode($this->notif),
         ]);
 
         return $trx->fresh();

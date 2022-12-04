@@ -23,6 +23,9 @@ class Food extends Model
         'types',
         'view_count'
     ];
+    protected $hidden = [
+        'deleted_at'
+    ];
 
     //relations
     public function images()

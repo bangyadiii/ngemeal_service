@@ -10,12 +10,14 @@ use App\Services\TransactionService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Midtrans\Config;
 use Midtrans\Notification;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class MidtransCallbackController extends Controller
 {
+    private $notif = null;
     public function __construct()
     {
         Midtrans::configureMidtrans();
@@ -23,56 +25,58 @@ class MidtransCallbackController extends Controller
 
     public function callback(Request $request)
     {
-        $notif = new Notification();
-        if (!\app()->environment("local")) {
-            $validSignatureKey =  hash(
-                'sha512',
-                $request->order_id .
-                    $request->status_code .
-                    $request->gross_amount .
-                    Config::$serverKey
-            );
+        if (!app()->environment("local")) {
+            $this->notif = new Notification();
+        } else {
+            $this->notif = $request->all();
+        }
 
-            if ($validSignatureKey !== $request->signature_key) {
+        if (!\app()->environment("local")) {
+            if ($this->notif->signature_key !== $request->signature_key) {
                 throw new BadRequestHttpException("Signature key is not valid");
             }
         }
 
-        $transaction = $notif->transaction_status;
-        $fraud = $notif->fraud_status;
-        $orderId = \app()->environment("local") ? $request->order_id : $notif->order_id;
+        $transaction = $this->notif->transaction_status;
+        $fraud = $this->notif->fraud_status;
+        $orderId = \app()->environment("local") ? $request->order_id : $this->notif->order_id;
 
         try {
             $trx = Transactions::find($orderId);
             \abort_if(!$trx, 404, "Transaction not found");
-            $trx->fill(["md_trx_id" => $notif->transaction_id]);
+            $trx->fill(["md_trx_id" => $this->notif->transaction_id]);
 
             if ($transaction == 'capture') {
                 if ($fraud == 'challenge') {
                     $trx->trx_status = "pending";
                 } elseif ($fraud == 'accept') {
                     $trx->trx_status = "success";
+                    $trx->delivery_status = "waiting_driver";
                 }
             } elseif ($transaction == 'settlement') {
                 $trx->trx_status = "success";
+                $trx->delivery_status = "waiting_driver";
             } elseif (
                 $transaction == 'cancel' ||
                 $transaction == 'deny' ||
                 $transaction == 'expire'
             ) {
-                $trx->status = "failed";
+                $trx->trx_status = "failed";
+                $trx->delivery_status = "failed";
             } elseif ($transaction == 'pending') {
                 $trx->trx_status = "pending";
             }
 
+            DB::transaction(function () use ($trx) {
+                $trx->save();
+            }, 3);
+
             PaymentLog::create([
                 "trx_id" => $trx->id,
-                "md_trx_id" => $notif->transaction_id,
-                "gross_amount" => $notif->gross_amount,
-                "raw" => \json_encode(\collect($notif)->toArray()),
+                "md_trx_id" => $this->notif->transaction_id,
+                "gross_amount" => $this->notif->gross_amount,
+                "raw" => \json_encode(\collect($this->notif)->toArray()),
             ]);
-
-            $trx->saveOrFail();
 
             return ResponseFormatter::success("Transaction success", 200, [
                 "transaction_detail" => $trx

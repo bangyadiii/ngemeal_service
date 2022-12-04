@@ -20,7 +20,9 @@ class Store extends Model
         "rekening_number",
         "logo_path"
     ];
-
+    protected $hidden = [
+        'deleted_at'
+    ];
     // relational
     public function user()
     {
