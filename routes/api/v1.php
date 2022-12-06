@@ -19,6 +19,7 @@ Route::post("/register", [RegisterUserController::class, "store"])->name("regist
 Route::get("/foods", [FoodController::class, "index"])->name("get.food");
 Route::post("/checkout", [TransactionController::class, "checkout"])->name("checkout");
 Route::get("/store", [StoreController::class, "index"])->name("store.index");
+Route::get("/check-email", [AuthenticateUserController::class, "checkEmailAvailable"])->name("check-email");
 
 // should authenticated
 Route::group(["middleware" => "auth:sanctum"], function () {
