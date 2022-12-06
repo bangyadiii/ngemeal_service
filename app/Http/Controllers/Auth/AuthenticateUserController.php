@@ -53,6 +53,6 @@ class AuthenticateUserController extends Controller
         $result = Auth::user()->currentAccessToken()->delete();
         \abort_if(!$result, 400, "Logout failed");
 
-        return ResponseFormatter::success("No Content", 204);
+        return ResponseFormatter::success("No Content", 200);
     }
 }
