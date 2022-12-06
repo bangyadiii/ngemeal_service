@@ -50,8 +50,8 @@ class AuthenticateUserController extends Controller
         // delete token
         // $request->user()->currentAccessToken()->delete();
 
-        $result = auth()->user()->currentAccessToken()->delete();
-        \abort_if(!$result, 400, "Bad Request");
+        $result = Auth::user()->currentAccessToken()->delete();
+        \abort_if(!$result, 400, "Logout failed");
 
         return ResponseFormatter::success("No Content", 204);
     }
