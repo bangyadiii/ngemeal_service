@@ -34,6 +34,7 @@ Route::group(["middleware" => "auth:sanctum"], function () {
     Route::get("/transactions", [TransactionController::class, "all"])->name("get.transaction");
     Route::put("/transactions/{id}", [TransactionController::class, "update"])->name("update.transaction");
     Route::post("/transactions/checkout", [TransactionController::class, "checkout"])->name("create.transaction");
+    Route::delete("/logout", [AuthenticateUserController::class, "logout"])->name("logout");
 });
 
 Route::any("/trx/notifications", [MidtransCallbackController::class, "callback"])->name("midtrans.notif");
