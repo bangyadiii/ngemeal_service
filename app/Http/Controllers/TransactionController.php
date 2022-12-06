@@ -44,8 +44,8 @@ class TransactionController extends Controller
         if ($DelStatus) {
             $trx->where("delivery_status", $DelStatus);
         }
-        if($oderBy) {
-            $trx->orderBy($oderBy);
+        if($oderBy == "latest") {
+            $trx->latest();
         }
 
         return ResponseFormatter::success("Transaction list berhasil diambil", 200, $trx->paginate($limit));
