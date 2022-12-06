@@ -20,7 +20,8 @@ class TransactionController extends Controller
         $TrxStatus = $request->input("trx_status");
         $DelStatus = $request->input("delivery_status");
 
-        $limit = $request->input("limit", 6);
+        $oderBy = $request->orderBy ?: "latest";
+        $limit = $request->limit ?: 6;
 
         if ($id) {
             $food = Transactions::find($id);
@@ -42,6 +43,9 @@ class TransactionController extends Controller
         }
         if ($DelStatus) {
             $trx->where("delivery_status", $DelStatus);
+        }
+        if($oderBy) {
+            $trx->orderBy($oderBy);
         }
 
         return ResponseFormatter::success("Transaction list berhasil diambil", 200, $trx->paginate($limit));
