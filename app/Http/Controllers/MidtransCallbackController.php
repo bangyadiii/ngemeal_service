@@ -40,6 +40,7 @@ class MidtransCallbackController extends Controller
         }
 
         $transaction = $this->notif->transaction_status;
+        $trxType = $this->notif->payment_type;
         $fraud = $this->notif->fraud_status;
         $orderId = $this->notif->order_id;
 
@@ -49,11 +50,14 @@ class MidtransCallbackController extends Controller
             $trx->fill(["md_trx_id" => $this->notif->transaction_id]);
 
             if ($transaction == 'capture') {
-                if ($fraud == 'challenge') {
-                    $trx->trx_status = "pending";
-                } elseif ($fraud == 'accept') {
-                    $trx->trx_status = "success";
-                    $trx->delivery_status = "waiting_driver";
+                if ($trxType == 'credit_card') {
+                    if ($fraud == 'challenge') {
+                        $trx->trx_status = "success";
+                        $trx->delivery_status = "waiting_driver";
+                    } else {
+                        $trx->trx_status = "success";
+                        $trx->delivery_status = "waiting_driver";
+                    }
                 }
             } elseif ($transaction == 'settlement') {
                 $trx->trx_status = "success";
