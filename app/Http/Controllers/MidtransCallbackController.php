@@ -27,10 +27,8 @@ class MidtransCallbackController extends Controller
     {
         if (!app()->environment("local")) {
             $this->notif = new Notification();
-            \info("hello world");
         } else {
             $this->notif = $request;
-            \info("aa ");
         }
 
         if (!\app()->environment("local")) {
