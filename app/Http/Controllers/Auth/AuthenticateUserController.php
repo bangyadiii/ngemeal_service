@@ -6,6 +6,7 @@ use App\Helpers\ResponseFormatter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ApiLoginRequest;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Request;
 
@@ -47,7 +48,11 @@ class AuthenticateUserController extends Controller
     public function logout(Request $request)
     {
         // delete token
-        $request->user()->currentAccessToken()->delete();
+        // $request->user()->currentAccessToken()->delete();
+
+        $result = auth()->user()->currentAccessToken()->delete();
+        \abort_if(!$result, 400, "Bad Request");
+
         return ResponseFormatter::success("No Content", 204);
     }
 }
