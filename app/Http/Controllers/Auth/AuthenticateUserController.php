@@ -6,6 +6,7 @@ use App\Helpers\ResponseFormatter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ApiLoginRequest;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -13,7 +14,14 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthenticateUserController extends Controller
 {
-    public function login(ApiLoginRequest $request)
+
+    /**
+     * Login
+     *
+     * @param ApiLoginRequest $request
+     * @return JsonResponse
+     */
+    public function login(ApiLoginRequest $request): JsonResponse
     {
         $user = User::with("roles:slug")->where("email", $request->email)->first();
 
@@ -21,6 +29,9 @@ class AuthenticateUserController extends Controller
             return ResponseFormatter::error(
                 "Email doesn't exist in our records.",
                 400,
+                [
+                    "email" => "Email doesn't exist in our records.",
+                ]
             );
         }
         if (!Hash::check($request->password, $user->password)) {
@@ -45,8 +56,13 @@ class AuthenticateUserController extends Controller
         ]);
     }
 
-
-    public function logout(Request $request)
+    /**
+     * Logout the user and invalidate token
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function logout(Request $request): JsonResponse
     {
         // delete token
         $result = $request->user()->currentAccessToken()->delete();
