@@ -14,8 +14,9 @@ class UserInformationController extends Controller
 {
     public function show(Request $request)
     {
+        $user = $request->user();
         return ResponseFormatter::success("OK", 200, [
-            "user" => $request->user()
+            "user" => $user->load("store")
         ]);
     }
 
