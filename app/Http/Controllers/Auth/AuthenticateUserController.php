@@ -23,7 +23,7 @@ class AuthenticateUserController extends Controller
      */
     public function login(ApiLoginRequest $request): JsonResponse
     {
-        $user = User::with("roles:slug")->where("email", $request->email)->first();
+        $user = User::with("roles:slug", "store")->where("email", $request->email)->first();
 
         if (!$user) {
             return ResponseFormatter::error(
