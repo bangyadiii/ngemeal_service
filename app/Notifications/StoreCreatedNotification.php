@@ -28,7 +28,7 @@ class StoreCreatedNotification extends Notification implements ShouldQueue
      * @param  mixed  $this->notifiable
      * @return array
      */
-    public function via($this->notifiable)
+    public function via()
     {
         return ['mail'];
     }
@@ -39,7 +39,7 @@ class StoreCreatedNotification extends Notification implements ShouldQueue
      * @param  mixed  $this->notifiable
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toMail($this->notifiable)
+    public function toMail()
     {
         return (new MailMessage)
             ->line("Hello " . $this->user->name)
@@ -54,7 +54,7 @@ class StoreCreatedNotification extends Notification implements ShouldQueue
      * @param  mixed  $this->notifiable
      * @return array
      */
-    public function toArray($this->notifiable)
+    public function toArray()
     {
         return [
             //
