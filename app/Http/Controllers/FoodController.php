@@ -21,6 +21,7 @@ class FoodController extends Controller
         $name = $request->input("name");
         $limit = $request->input("limit", 6);
         $types = $request->input("types");
+        $storeId = $request->input("store_id");
 
         $price_from = $request->input("price_from");
         $price_to = $request->input("price_to");
@@ -28,6 +29,7 @@ class FoodController extends Controller
         $rate_from = $request->input("rate_from");
         $rate_to = $request->input("rate_to");
         $category = $request->input("category");
+
         $view_count_from = null;
         $orderByCol = null;
         $orderByType = null;
@@ -63,6 +65,10 @@ class FoodController extends Controller
         if ($name) {
             $food->where("name", "like", "%" . $name . "%");
         }
+        if ($storeId) {
+            $food->where("store_id", "=", $storeId);
+        }
+
         if ($types) {
             $food->where("types", "like", "%" . $types . "%");
         }
@@ -79,6 +85,7 @@ class FoodController extends Controller
         if ($rate_to) {
             $food->where("rate", "<=", $rate_to);
         }
+
         if ($view_count_from) {
             $food->where("view_count", ">=", $view_count_from);
         }
