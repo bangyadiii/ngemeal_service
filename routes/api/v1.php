@@ -8,8 +8,8 @@ use App\Http\Controllers\FoodImagesController;
 use App\Http\Controllers\MidtransCallbackController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\Admin\TransactionController as AdminTransactionController;
 use Illuminate\Support\Facades\Route;
-
 
 
 
@@ -29,6 +29,7 @@ Route::group(["middleware" => "auth:sanctum"], function () {
         Route::get("/me", [UserInformationController::class, "show"])->name("show");
     });
 
+
     Route::apiResource("store", StoreController::class)->except("index", "show");
     Route::apiResource("foods", FoodController::class)->except("index", "show");
     Route::post("/foods/upload-photo/{food}", [FoodImagesController::class, "store"])->name(".food.upload-images");
@@ -36,6 +37,11 @@ Route::group(["middleware" => "auth:sanctum"], function () {
     Route::put("/transactions/{id}", [TransactionController::class, "update"])->name("update.transaction");
     Route::post("/transactions/checkout", [TransactionController::class, "checkout"])->name("create.transaction");
     Route::delete("/logout", [AuthenticateUserController::class, "logout"])->name("logout");
+
+
+    Route::as('admin.')->prefix('store')->group(function () {
+        Route::get("{store}/transactions", [AdminTransactionController::class, "all"])->name("get.transaction");
+    });
 });
 
 Route::any("/trx/notifications", [MidtransCallbackController::class, "callback"])->name("midtrans.notif");

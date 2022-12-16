@@ -44,7 +44,7 @@ class TransactionController extends Controller
         if ($DelStatus) {
             $trx->where("delivery_status", $DelStatus);
         }
-        if($oderBy == "latest") {
+        if ($oderBy == "latest") {
             $trx->latest();
         }
 

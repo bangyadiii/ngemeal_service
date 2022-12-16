@@ -33,7 +33,8 @@ class Transactions extends Model
 
     protected $hidden = [
         "md_trx_id",
-        "deleted_at"
+        "deleted_at",
+        "metadata"
     ];
 
     // relationship
