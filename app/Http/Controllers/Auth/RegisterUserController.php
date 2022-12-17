@@ -14,16 +14,20 @@ class RegisterUserController extends Controller
 {
     public function store(RegisterUserRequest $request)
     {
-        $validated = $request->validated();
+        $validated = $request->safe()->except('profile_photo_path');
         $validated["password"] = Hash::make($validated["password"]);
         $user = new User($validated);
         $user->roles()
             ->associate(Role::where("slug", "customer")->first())
             ->saveOrFail();
 
+        if ($file = $request->file('profile_photo')) {
+            $user->updateProfilePhoto($file);
+        }
 
         $roles = $user->roles->slug;
         $accessToken = $user->createToken($request->header("user-agent"), [$roles])->plainTextToken;
+
 
         NewUserRegistered::dispatch($user);
 
