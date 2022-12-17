@@ -66,7 +66,7 @@ class FoodController extends Controller
             $food->where("name", "like", "%" . $name . "%");
         }
         if ($storeId) {
-            $food->where("store_id", "=", $storeId);
+            $food->where("store_id", $storeId);
         }
 
         if ($types) {

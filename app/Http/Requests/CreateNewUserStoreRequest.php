@@ -26,11 +26,11 @@ class CreateNewUserStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            "store_name" => ['required', 'string'],
-            "address" => ['required', 'string'],
-            "description" => ['string'],
+            "store_name" => ['required', 'string', 'max:255'],
+            "address" => ['required', 'string', 'max:255'],
+            "description" => ['string', 'max:255'],
             "rekening_number" => ['numeric'],
-            "logo" => ['file', "mimes:svg,png,jpg,jpeg"],
+            "logo" => ['file', "mimes:svg,png,jpg,jpeg", 'max:2098'],
         ];
     }
 }

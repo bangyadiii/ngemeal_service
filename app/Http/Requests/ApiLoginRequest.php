@@ -30,8 +30,8 @@ class ApiLoginRequest extends FormRequest
     {
         return [
             "email" => ["required", "email"],
-            "password" => ["required", "string"],
-            "device_name" => ["string"]
+            "password" => ["required", "string", 'max:100'],
+            "device_name" => ["string", 'max:100']
         ];
     }
 

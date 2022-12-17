@@ -25,8 +25,8 @@ class FoodUpdateRequest extends FormRequest
     {
         return [
             "name" => ["string"],
-            "description" => ["string"],
-            "ingredients" => ["string"],
+            "description" => ["string", 'max:10000'],
+            "ingredients" => ["string", 'max:300'],
             "price" => ["numeric"],
             "rate" => ["numeric", "min:1", "max:5"],
             "types" => ["string"],
