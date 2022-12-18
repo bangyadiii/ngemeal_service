@@ -53,7 +53,7 @@ class StoreController extends Controller
         $this->checkAndCreateDirIfNotExist(self::$modelName);
         if ($request->hasFile("logo")) {
             try {
-                $filePath =  $this->storeMedia($request->file("logo"), self::$modelName + "/logo", true);
+                $filePath =  $this->storeMedia($request->file("logo"), self::$modelName . "/logo", true);
             } catch (\Throwable $th) {
                 return ResponseFormatter::error(
                     "Error occur while creating new store.",
@@ -81,7 +81,7 @@ class StoreController extends Controller
 
         $this->checkAndCreateDirIfNotExist(self::$modelName);
         if ($request->hasFile("logo")) {
-            $filePath =  $this->storeMedia($request->file("logo"), self::$modelName + "/logo", true);
+            $filePath =  $this->storeMedia($request->file("logo"), self::$modelName . "/logo", true);
             if (!$filePath) {
                 return ResponseFormatter::error(
                     "Error occur while updating store.",
