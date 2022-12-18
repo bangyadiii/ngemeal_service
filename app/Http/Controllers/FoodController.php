@@ -39,7 +39,7 @@ class FoodController extends Controller
             $food->view_count++;
             $food->save();
 
-            if ($food) {
+            if (!$food) {
                 return ResponseFormatter::error("Food not found", 404);
             }
             return ResponseFormatter::success("OK", 200, $food);
