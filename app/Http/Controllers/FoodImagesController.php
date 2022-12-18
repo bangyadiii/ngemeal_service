@@ -24,10 +24,6 @@ class FoodImagesController extends Controller
         }
 
         if ($request->hasFile("images")) {
-            if (\count($request->file("images")) > 1) {
-
-                $this->uploadAndCheck($request->file('iamges'), false, $imagesArr);
-            }
             foreach ($request->file("images", []) as $img) {
                 $this->uploadAndCheck($img, false, $imagesArr);
             }
