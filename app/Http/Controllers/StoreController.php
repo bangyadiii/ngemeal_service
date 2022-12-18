@@ -52,14 +52,16 @@ class StoreController extends Controller
 
         $this->checkAndCreateDirIfNotExist(self::$modelName);
         if ($request->hasFile("logo")) {
-            $filePath =  $this->storeMedia($request->file("logo"), self::$modelName + "/logo", true);
-            if (!$filePath) {
+            try {
+                $filePath =  $this->storeMedia($request->file("logo"), self::$modelName + "/logo", true);
+            } catch (\Throwable $th) {
                 return ResponseFormatter::error(
                     "Error occur while creating new store.",
                     500,
                     "Failed to upload images."
                 );
             }
+
             $validated['logo_path'] = Storage::url($filePath);
         }
 
