@@ -100,10 +100,7 @@ class FoodController extends Controller
         return ResponseFormatter::success(
             "Product list berhasil diambil",
             200,
-            $food->with(["images" => function ($query) {
-                $query->where('is_primary', true);
-                return $query;
-            }, "store"])->paginate($limit)
+            $food->with("images", "store")->paginate($limit)
         );
     }
     public function store(FoodStoreRequest $request)
