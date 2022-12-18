@@ -36,12 +36,14 @@ class FoodController extends Controller
 
         if ($id) {
             $food = Food::with("images", "store")->find($id);
-            $food->view_count++;
-            $food->save();
 
             if (!$food) {
                 return ResponseFormatter::error("Food not found", 404);
             }
+
+            $food->view_count++;
+            $food->save();
+
             return ResponseFormatter::success("OK", 200, $food);
         }
 
