@@ -33,7 +33,7 @@ class TransactionController extends Controller
         }
 
 
-        $trx = Transactions::with(["user", 'food'])->where("user_id", $request->user()->id);
+        $trx = Transactions::with(["user", 'food.images'])->where("user_id", $request->user()->id);
 
         if ($food_id) {
             $trx->where("food_id", $food_id);
