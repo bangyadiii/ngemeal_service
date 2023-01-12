@@ -13,13 +13,12 @@ Ngemeal is a platform for ordering food online made for the final assignment of 
     $ php artisan migrate
     ```
 -   Run
-
-```bash
-$ php artisan serve
-```
+    ```bash
+    $ php artisan serve
+    ```
 
 to run the Laravel's development server.
 
 ### Documentation
 
-Here is the API Postman documentation [documentation] ()
+Here is the API Postman [documentation](https://documenter.getpostman.com/view/16615700/2s8YzWTMCg)
