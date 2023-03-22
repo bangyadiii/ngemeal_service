@@ -11,7 +11,7 @@ Ngemeal is a platform for ordering food online made for the final assignment of 
 ## How to use this repository
 
 -   Rename the `.env.example ` file to `.env`.
--   Fill the value in `.env` file based on your case. If you're my teammates in this project, ask me for the S3 credentials and AWS RDS credentials or you can MySQL.
+-   Fill the value in `.env` file based on your case. If you're my teammates in this project, ask me for the S3 credentials and AWS RDS credentials or you can MySQL and Storage built in Laravel.
 -   Run migration with :
     ```bash
     $ php artisan migrate
