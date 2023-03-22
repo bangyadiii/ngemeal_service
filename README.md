@@ -4,6 +4,9 @@
 
 Ngemeal is a platform for ordering food online made for the final assignment of lectures in the Integration Programming course. This repository is webservice for ngemeal platform. This webservice has been built using the laravel framework which applies the Clean Architecture and SOLID principles.
 
+## Framework
+-   Laravel 9
+
 ## How to use this repository
 
 -   Rename the `.env.example ` file to `.env`.
@@ -19,6 +22,6 @@ Ngemeal is a platform for ordering food online made for the final assignment of 
 
 to run the Laravel's development server.
 
-### Documentation
+## Documentation
 
 Here is the API Postman [documentation](https://documenter.getpostman.com/view/16615700/2s8YzWTMCg)
