@@ -2,7 +2,7 @@
 
 ## About Ngemeal
 
-Ngemeal is a platform for ordering food online made for the final assignment of lectures in the Integration Programming course. This repository is webservice for ngemeal platform. This webservice has been built using the laravel framework which applies the Clean Architecture and SOLID principles.
+Ngemeal is a platform for ordering food online made for the final assignment of lectures in the Integration Programming course. 
 
 ## Framework & Technologies
 -   Laravel 9
