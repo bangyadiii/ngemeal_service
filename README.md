@@ -7,6 +7,7 @@ Ngemeal is a platform for ordering food online made for the final assignment of 
 ## Framework & Technologies
 -   Laravel 9
 -   Midtrans Integrated
+-   Amazon S3
 
 ## How to use this repository
 
