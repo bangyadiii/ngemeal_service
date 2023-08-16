@@ -2,13 +2,11 @@
 
 namespace App\Http\Requests;
 
-use App\Actions\Fortify\PasswordValidationRules;
 use Illuminate\Foundation\Http\FormRequest;
-use Laravel\Jetstream\Jetstream;
+use Illuminate\Validation\Rules\Password;
 
 class RegisterUserRequest extends FormRequest
 {
-    use PasswordValidationRules;
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -33,8 +31,7 @@ class RegisterUserRequest extends FormRequest
             "phone_number" => ["string", "min:8", "max:14"],
             "house_number" => ["string", 'max:255'],
             "city" => ["string", 'max:255'],
-            'password' => $this->passwordRules(),
-            'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
+            'password' => Password::default(),
             "profile_photo" => ["image", "mimes:png,jpg,webp", "max:2098"],
         ];
     }

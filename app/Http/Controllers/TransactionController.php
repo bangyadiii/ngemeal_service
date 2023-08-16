@@ -26,7 +26,7 @@ class TransactionController extends Controller
         if ($id) {
             $food = Transactions::find($id);
 
-            if ($food) {
+            if (!$food) {
                 return ResponseFormatter::error("Food not found", 404);
             }
             return ResponseFormatter::success("OK", 200, $food);
